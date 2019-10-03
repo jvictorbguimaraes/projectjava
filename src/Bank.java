@@ -4,7 +4,8 @@ import org.w3c.dom.NodeList;
 
 public class Bank {	
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception 
+	{
 		
 		XmlUtils xml = new XmlUtils();		
 		
