@@ -10,6 +10,7 @@ public class Client
 	String password;
 	Saving saving;
 	Chequing chequing;
+	Credit credit;
 		
 	public Client()
 	{
