@@ -9,9 +9,13 @@ public class Bank {
 		
 		XmlUtils xml = new XmlUtils();		
 		
-		Client cli = new Client(1,"Joao Victor","Guimaraes","Somewhere","joaovictor","123456");
+		Client cli = new Client(1,"Joao Victor","Guimaraes","j@gmail.com","Somewhere","joaovictor","123456");
+		cli.saving = new Saving(1,0,"Test");
+		cli.chequing = new Chequing(0,0,"Test");
 		
 		cli.createNewClient(xml, cli);
+		
+		//System.out.print(cli.getClientInfo(xml, "Joao Victor"));
 		
 //		NodeList list = xml.getElementsByTagName("Client");
 //		
