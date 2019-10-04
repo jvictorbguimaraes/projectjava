@@ -4,23 +4,23 @@ public abstract class Account
 {
 	//declaring local variables
 	private int accountNum;
-	private int accountBal;
-	private String accountName;
+	private double accountBal;
+	private String accountPlan;
 	
 	//unparameterized constructor
 	public Account()
 	{
 		accountNum=0;
 		accountBal=0;
-		accountName="Null";
+		accountPlan=null;
 	}
 	
 	//parameterized constructor
-	public Account(int accountNum, int accountBal, String accountName)
+	public Account(int accountNum, double accountBal, String accountPlan)
 	{
 		this.accountNum=accountNum;
-		this.accountBal=accountNum;
-		this.accountName=accountName;
+		this.accountBal=accountBal;
+		this.accountPlan=accountPlan;
 	}
 	
 	//getters
@@ -29,14 +29,14 @@ public abstract class Account
 		return accountNum;
 	}
 	
-	public int getAccountBal()
+	public double getAccountBal()
 	{
 		return accountBal;
 	}
 	
-	public String getAccountName()
+	public String getAccountPlan()
 	{
-		return accountName;
+		return accountPlan;
 	}
 	
 	//setters
@@ -45,14 +45,14 @@ public abstract class Account
 		this.accountNum=accountNum;
 	}
 	
-	public void setAccountBal(int accountBal)
+	public void setAccountBal(double accountBal)
 	{
 		this.accountBal=accountBal;
 	}
 	
-	public void setAccountName(String accountName)
+	public void setAccountPlan(String accountPlan)
 	{
-		this.accountName=accountName;
+		this.accountPlan=accountPlan;
 	}
 	
 }
