@@ -71,4 +71,24 @@ public abstract class Account
 		//xml functions to save
 	}
 	
+	public void deposit(double amount)
+	{
+		this.accountBal += amount;
+		//xml functions to save
+		
+	}
+	
+	public void billpayment(double amount)
+	{
+		//
+		this.accountBal -= amount;
+		//xml functions to save
+		
+	}
+	
+	public void moneytransfer(double amount, String Raccountno)
+	{
+		this.accountBal -= amount;
+		//account balance of receiver += amount
+	}
 }
