@@ -4,23 +4,23 @@ import org.w3c.dom.NodeList;
 
 public class Client 
 {
-	int id;
-	String name;
-	String lastname;
-	String email;
-	String address;
-	String username;
-	String password;
-	Account saving;
-	Account chequing;
-	Credit credit;
-		
+	private int id;
+	private String name;
+	private String lastname;
+	private String email;
+	private String address;
+	private String password;
+	private Account saving;
+	private Account chequing;
+	private Credit credit;
+	private Element nodeElement;
+
 	public Client()
 	{
 		
 	}
 		
-	public Client(int id, String name, String lastname, String email, String address, String username, String password) 
+	public Client(int id, String name, String lastname, String email, String address, String password) 
 	{
 		super();
 		this.id = id;
@@ -28,7 +28,6 @@ public class Client
 		this.lastname = lastname;
 		this.email = email;
 		this.address = address;
-		this.username = username;
 		this.password = password;
 	}
 
@@ -73,16 +72,6 @@ public class Client
 		this.address = address;
 	}
 
-	public String getUsername() 
-	{
-		return username;
-	}
-
-	public void setUsername(String username) 
-	{
-		this.username = username;
-	}
-
 	public String getPassword() 
 	{
 		return password;
@@ -116,61 +105,117 @@ public class Client
 	public void setChequing(Account chequing) {
 		this.chequing = chequing;
 	}
+	
+	public Element getNodeElement() {
+		return nodeElement;
+	}
+
+	public void setNodeElement(Element nodeElement) {
+		this.nodeElement = nodeElement;
+	}
+	
+	public boolean validateLogin(XmlUtils xml, String email, String password){
+		try{
+			NodeList list = xml.getElementsByTagName("Client");
+			
+			for(int i=0; i< list.getLength(); i++){
+				Node node = list.item(i);			
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					Element elem = (Element) node;
+					if(elem.getElementsByTagName("Email").item(0).getTextContent().equalsIgnoreCase(email)){
+						if(elem.getElementsByTagName("Password").item(0).getTextContent().equalsIgnoreCase(password)){
+							return true;
+						}
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void updateClientInfo(XmlUtils xml, Client client){
+		try {
+			xml.changeNodeValue(client.nodeElement, "Name", client.name);
+			xml.changeNodeValue(client.nodeElement, "LastName", client.lastname);
+			xml.changeNodeValue(client.nodeElement, "Email", client.email);
+			xml.changeNodeValue(client.nodeElement, "Address", client.address);
+			xml.changeNodeValue(client.nodeElement, "Password", client.password);		
+			xml.updateXml();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void createNewClient(XmlUtils xml, Client client)
 	{
-		Element element = xml.createNewElement("Bank","Client");
-		xml.createChildElement(element, "Id", String.valueOf(client.id));
-		xml.createChildElement(element, "Name", client.name);
-		xml.createChildElement(element, "LastName", client.lastname);
-		xml.createChildElement(element, "Email", client.email);
-		xml.createChildElement(element, "Address", client.address);
-		xml.createChildElement(element, "Username", client.username);
-		xml.createChildElement(element, "Password", client.password);
+		try {
+			Element element = xml.createNewElement("Bank","Client");
+			xml.createChildElement(element, "Id", String.valueOf(client.id));
+			xml.createChildElement(element, "Name", client.name);
+			xml.createChildElement(element, "LastName", client.lastname);
+			xml.createChildElement(element, "Email", client.email);
+			xml.createChildElement(element, "Address", client.address);
+			xml.createChildElement(element, "Password", client.password);
+			xml.createChildElement(element, "Admin", "False");
+			
+			Element saving = xml.createNewParentElement(element,"Saving");
+			xml.createChildElement(saving, "Number", String.valueOf(client.saving.getAccountNum()));
+			xml.createChildElement(saving, "Balance", String.valueOf(client.saving.getAccountBal()));
+			
+			Element chequing = xml.createNewParentElement(element,"Chequing");
+			xml.createChildElement(chequing, "Number", String.valueOf(client.chequing.getAccountNum()));
+			xml.createChildElement(chequing, "Balance", String.valueOf(client.chequing.getAccountBal()));
 		
-		Element saving = xml.createNewParentElement(element,"Saving");
-		xml.createChildElement(saving, "Number", String.valueOf(client.saving.getAccountNum()));
-		xml.createChildElement(saving, "Balance", String.valueOf(client.saving.getAccountBal()));
-		
-		Element chequing = xml.createNewParentElement(element,"Chequing");
-		xml.createChildElement(chequing, "Number", String.valueOf(client.chequing.getAccountNum()));
-		xml.createChildElement(chequing, "Balance", String.valueOf(client.chequing.getAccountBal()));
+			xml.updateXml();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Client getClientInfo(XmlUtils xml, String name)
 	{
-		NodeList list = xml.getElementsByTagName("Client");
 		Client cli = new Client();
-		
-		for(int i=0; i< list.getLength(); i++){
-			Node node = list.item(i);			
-			if(node.getNodeType() == Node.ELEMENT_NODE){
-				Element elem = (Element) node;
-				if(elem.getElementsByTagName("Name").item(0).getTextContent().equalsIgnoreCase(name)){
-					cli.id = xml.getIntValue(elem,"Id");
-					cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
-					cli.lastname = elem.getElementsByTagName("LastName").item(0).getTextContent();
-					cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
-					cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
-					
-					NodeList saving = elem.getElementsByTagName("Savings");
-					Element savingElem = (Element) saving.item(0);
-					
-					cli.saving = new Saving();
-					cli.saving.setAccountNum(xml.getIntValue(savingElem, "Number"));
-					cli.saving.setAccountBal(xml.getDoubleValue(savingElem, "Balance"));
-					
-					NodeList chequing = elem.getElementsByTagName("Chequing");
-					Element cheqElem = (Element) chequing.item(0);
-					
-					cli.chequing = new Chequing();
-					cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
-					cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
-					break;
+		try{
+			NodeList list = xml.getElementsByTagName("Client");		
+			
+			for(int i=0; i< list.getLength(); i++){
+				Node node = list.item(i);			
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					Element elem = (Element) node;
+					cli.nodeElement = elem;
+					if(elem.getElementsByTagName("Name").item(0).getTextContent().equalsIgnoreCase(name)){
+						cli.id = xml.getIntValue(elem,"Id");
+						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
+						cli.lastname = elem.getElementsByTagName("LastName").item(0).getTextContent();
+						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
+						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
+						
+						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){					
+							NodeList saving = elem.getElementsByTagName("Savings");
+							Element savingElem = (Element) saving.item(0);
+							
+							cli.saving = new Saving();
+							cli.saving.setAccountNum(xml.getIntValue(savingElem, "Number"));
+							cli.saving.setAccountBal(xml.getDoubleValue(savingElem, "Balance"));
+							
+							NodeList chequing = elem.getElementsByTagName("Chequing");
+							Element cheqElem = (Element) chequing.item(0);
+							
+							cli.chequing = new Chequing();
+							cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
+							cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
+						}
+						break;
+					}
 				}
-			}
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		return cli;
+		return cli;	
 	}
 }

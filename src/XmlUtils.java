@@ -3,6 +3,7 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -18,12 +19,17 @@ public class XmlUtils
 	private DocumentBuilder docBuilder;
 	private Document doc;
 	
-	public XmlUtils() throws Exception
+	// Initialization of the xml variables
+	public XmlUtils()
 	{
-		xmlFile = new File(".\\bank.xml");		
-		facBuilder = DocumentBuilderFactory.newInstance();
-		docBuilder = facBuilder.newDocumentBuilder();		
-		doc = docBuilder.parse(xmlFile);
+		try {
+			xmlFile = new File(".\\bank.xml");		
+			facBuilder = DocumentBuilderFactory.newInstance();
+			docBuilder = facBuilder.newDocumentBuilder();			
+			doc = docBuilder.parse(xmlFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Changing the information in a variable in the xml
@@ -39,13 +45,18 @@ public class XmlUtils
 	}
 	
 	// Updating the information in the xml file that was changed
-	public void updateXml() throws Exception
+	public void updateXml()
 	{
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(xmlFile);
-		transformer.transform(source, result);
+		try {
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(xmlFile);
+		
+			transformer.transform(source, result);
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Creating a new element in the xml file. Using an parent name and attaching a child to it
@@ -73,6 +84,7 @@ public class XmlUtils
 		element.appendChild(child);
 	}	
 	
+	//Getting integer values from the xml
 	public int getIntValue(Element element, String tagName){
 		if(element.getElementsByTagName(tagName).item(0).getTextContent().isEmpty()){
 			return 0;
@@ -80,6 +92,7 @@ public class XmlUtils
 		return Integer.parseInt(element.getElementsByTagName(tagName).item(0).getTextContent());
 	}
 	
+	//Getting double values from the xml
 	public double getDoubleValue(Element element, String tagName){
 		if(element.getElementsByTagName(tagName).item(0).getTextContent().isEmpty()){
 			return 0;

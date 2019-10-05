@@ -38,6 +38,10 @@ public class Transactions{
 				+ ", SAccountNo=" + SAccountNo + "]";
 	}
 	
+	public Transactions(){
+		
+	}
+	
 	public Transactions(int iD, Date transDate, double amount, String sAccountNo) {
 		super();
 		ID = iD;

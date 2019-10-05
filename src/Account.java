@@ -1,13 +1,16 @@
 import java.util.ArrayList;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 public abstract class Account
 
 {
 	//declaring local variables
-	private int accountNum;
-	private double accountBal;
-	private String accountPlan;
-	private ArrayList<Transactions> transactions;
+	protected int accountNum;
+	protected double accountBal;
+	protected String accountPlan;
+	protected ArrayList<Transactions> transactions;
 	
 	//unparameterized constructor
 	public Account()
@@ -65,10 +68,33 @@ public abstract class Account
 		this.transactions = transactions;
 	}
 	
-	public void withdraw(double amount)
-	{
-		this.accountBal -= amount;
-		//xml functions to save
+	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount);
+	
+	public void deposit(Client cli, XmlUtils xml, double amount) {
+		try {
+			this.accountBal += amount;
+			NodeList chequing = cli.getNodeElement().getElementsByTagName("Chequing");
+			Element cheqElem = (Element) chequing.item(0);
+			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));		
+			xml.updateXml();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 	
+	public boolean payBill(Client cli, XmlUtils xml, int billId) {
+		try {			
+			BillPayment bill = new BillPayment();
+			bill = bill.getBill(xml, billId);
+			
+			if(!bill.isPaid() && withdraw(cli, xml, bill.getAmount())){	
+				bill.setBillPayment(xml);
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return false;
+	}	
 }
