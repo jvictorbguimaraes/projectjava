@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class Bank extends JFrame implements ActionListener
 {	
+	
 	/**
 	 */
 	private static final long serialVersionUID = 1L;
