@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 public abstract class Account
 
 {
@@ -10,7 +7,7 @@ public abstract class Account
 	protected int accountNum;
 	protected double accountBal;
 	protected String accountPlan;
-	protected ArrayList<Transactions> transactions;
+	protected ArrayList<Transaction> transactions;
 	
 	//unparameterized constructor
 	public Account()
@@ -60,27 +57,17 @@ public abstract class Account
 		this.accountPlan=accountPlan;
 	}
 
-	public ArrayList<Transactions> getTransactions() {
+	public ArrayList<Transaction> getTransactions() {
 		return transactions;
 	}
 
-	public void setTransactions(ArrayList<Transactions> transactions) {
+	public void setTransactions(ArrayList<Transaction> transactions) {
 		this.transactions = transactions;
 	}
 	
 	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount);
 	
-	public void deposit(Client cli, XmlUtils xml, double amount) {
-		try {
-			this.accountBal += amount;
-			NodeList chequing = cli.getNodeElement().getElementsByTagName("Chequing");
-			Element cheqElem = (Element) chequing.item(0);
-			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));		
-			xml.updateXml();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-	}
+	public abstract void deposit(Client cli, XmlUtils xml, double amount);
 	
 	public boolean payBill(Client cli, XmlUtils xml, int billId) {
 		try {			
@@ -90,11 +77,22 @@ public abstract class Account
 			if(!bill.isPaid() && withdraw(cli, xml, bill.getAmount())){	
 				bill.setBillPayment(xml);
 				return true;
-			}
-			
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		return false;
 	}	
+	
+	public boolean transferMoney(XmlUtils xml, Client cli, int accountNo, double amount){
+		if(this.accountBal < amount)
+			return false;
+		
+		
+		
+		
+		return true;
+		
+		
+	}
 }

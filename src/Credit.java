@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -50,5 +52,10 @@ public class Credit extends Account
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public void deposit(Client cli, XmlUtils xml, double amount) {
+				
 	}
 }

@@ -4,7 +4,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class BillPayment extends Transactions {
+public class BillPayment extends Transaction {
 
 	private String BillType;
 	private int BillNo;
@@ -38,9 +38,9 @@ public class BillPayment extends Transactions {
 		
 	}
 	
-	public BillPayment(int iD, Date transDate, double amount, String sAccountNo, String billType,
+	public BillPayment(int iD, Date transDate, double amount, String billType,
 			int billNo) {
-		super(iD, transDate, amount, sAccountNo);
+		super(iD, transDate, amount);
 		BillType = billType;
 		BillNo = billNo;
 	}
@@ -84,6 +84,19 @@ public class BillPayment extends Transactions {
 					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void addTransaction(Client cli, XmlUtils xml, Element element){
+		try{
+			NodeList trans = element.getElementsByTagName("Transactions");
+			Element transElem = (Element) trans.item(0);
+			Element bill = xml.createNewParentElement(transElem,"BillPayment");
+			xml.createChildElement(bill, "ID", String.valueOf(super.id));
+			xml.createChildElement(bill, "Date", super.TransDate.toString());
+			xml.createChildElement(bill, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

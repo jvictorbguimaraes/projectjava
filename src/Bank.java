@@ -15,6 +15,7 @@ public class Bank extends JFrame implements ActionListener
 	JLabel l1;
 	
 	XmlUtils xml = new XmlUtils();
+	Client c;
 	
 	//Customer Variables
 	private JTextField login, pass, name1, contact1, email1, address1, password1, name2, contact2, email2, address2, password2, security,name3,contact3, email3,address3,searchtf,amount1,amount2,amount3;
@@ -51,7 +52,7 @@ public class Bank extends JFrame implements ActionListener
 	      public void actionPerformed(ActionEvent evt) { 
 	    	
 	    	//System.out.println(login.getText()+" "+pass.getText());
-	    	Client c= new Client().getClientInfo(xml,login.getText());
+	    	c= new Client().getClientInfo(xml,login.getText());
 	    	
 	    	if(c.getPassword().equals(pass.getText()))
 	    	{
@@ -229,13 +230,10 @@ public class Bank extends JFrame implements ActionListener
 		
 		//XmlUtils xml = new XmlUtils();		
 		
-//		Client cli = new Client(1,"Joao Victor","Guimaraes","j@gmail.com","Somewhere","joaovictor","123456");
-//		cli.saving = new Saving(1,0,"Test");
-//		cli.chequing = new Chequing(0,0,"Test");
 		
 		//cli.createNewClient(xml, cli);
 		
-		//System.out.print(cli.getClientInfo(xml, "Joao Victor"));
+		//System.out.print();
 		
 //		NodeList list = xml.getElementsByTagName("Client");
 //		

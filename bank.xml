@@ -3,7 +3,8 @@
 	<Email>
 		</Email><Admin>False</Admin><Savings>
 			<Number>123456</Number>
-			<Balance>-5.0</Balance></Savings>
+			<Balance>1495.0</Balance>
+			<Transactions><Deposit><ID>0</ID><Date>Sat Oct 05 22:20:05 EDT 2019</Date><Amount>1500.0</Amount></Deposit></Transactions></Savings>
 	<Chequing>
 		<Number>54354543</Number>
 		<Balance>-1072.5</Balance></Chequing>

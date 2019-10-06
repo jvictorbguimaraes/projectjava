@@ -39,6 +39,15 @@ public class Client
 	{
 		this.id = id;
 	}
+	
+	public Credit getCredit() {
+		return credit;
+	}
+
+	public void setCredit(Credit credit) {
+		this.credit = credit;
+	}
+
 	public String getName() 
 	{
 		return name;
@@ -163,13 +172,22 @@ public class Client
 			xml.createChildElement(element, "Admin", "False");
 			
 			Element saving = xml.createNewParentElement(element,"Saving");
-			xml.createChildElement(saving, "Number", String.valueOf(client.saving.getAccountNum()));
-			xml.createChildElement(saving, "Balance", String.valueOf(client.saving.getAccountBal()));
+			xml.createChildElement(saving, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(saving, "Balance", "0");
+			xml.createNewParentElement(saving,"Transactions");
 			
 			Element chequing = xml.createNewParentElement(element,"Chequing");
-			xml.createChildElement(chequing, "Number", String.valueOf(client.chequing.getAccountNum()));
-			xml.createChildElement(chequing, "Balance", String.valueOf(client.chequing.getAccountBal()));
-		
+			xml.createChildElement(chequing, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(chequing, "Balance", "0");
+			xml.createNewParentElement(chequing,"Transactions");
+			
+			Element credit = xml.createNewParentElement(element,"Credit");
+			xml.createChildElement(credit, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(credit, "Balance", "0");
+			xml.createChildElement(credit, "CredScore", "0");
+			xml.createChildElement(credit, "CredLimit", String.valueOf(client.credit.getCredLimit()));
+			xml.createNewParentElement(credit,"Transactions");
+			
 			xml.updateXml();
 		} catch (Exception e) {
 			e.printStackTrace();
