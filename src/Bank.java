@@ -7,19 +7,18 @@ import javax.swing.*;
 
 public class Bank extends JFrame implements ActionListener
 {	
-	
-	/**
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	//private variables
-	JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17;
-	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, withdraw, deposit, cl1, search, logout,pay;
+	JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17,p18;
+	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8, withdraw, deposit, cl1, search, logout1,logout2,pay;
 	JLabel l1;
 	
+	XmlUtils xml = new XmlUtils();
+	
 	//Customer Variables
-	private JLabel name1, contact1, email1, address1, password1, accType1;
-	private JTextField login, pass, name2, contact2, email2, address2, password2, accType2, security,name3,contact3, email3,address3,searchtf,amount1,amount2,amount3;
+	private JTextField login, pass, name1, contact1, email1, address1, password1, name2, contact2, email2, address2, password2, security,name3,contact3, email3,address3,searchtf,amount1,amount2,amount3;
+	private JTextField senderA,recieverA,securityQ,securityA;
 	private String[] questions = { "Whats your maiden name?","What was your first job?", "Whats your pet's name?"};
 	private final JComboBox<String> cb1 = new JComboBox<String>(questions);
 	private String[] accType11 = { "Chequing","Savings","Credit"};
@@ -28,100 +27,39 @@ public class Bank extends JFrame implements ActionListener
 	private final JComboBox<String> cb22 = new JComboBox<String>(accType22);
 	private String[] accType23 = { "Chequing","Savings","Credit"};
 	private final JComboBox<String> cb23 = new JComboBox<String>(accType23);
+	private String[] accType24 = { "Chequing","Savings","Credit"};
+	private final JComboBox<String> cb24 = new JComboBox<String>(accType24);
+	private String[] accType25 = { "Chequing","Savings","Credit"};
+	private final JComboBox<String> cb25 = new JComboBox<String>(accType25);
+	private String[] accType26 = { "Chequing","Savings"};
+	private final JComboBox<String> cb26 = new JComboBox<String>(accType26);
 	private String[] billType = { "Electricity","Water","Mobile","Credit"};
 	private final JComboBox<String> cb3 = new JComboBox<String>(billType);
 	
 	//constructor to set up GUI components
 	public Bank()
 	{
-
-		p1 = new JPanel(new GridLayout(6,2,10,10));
-		p2 = new JPanel(new GridLayout(6,2,10,10));
-		p3 = new JPanel(new GridLayout(7,2,10,10)); 
-		p4 = new JPanel(new GridLayout(6,1,10,10));
-		p5 = new JPanel(new GridLayout(6,1,10,10));
-		p6 = new JPanel(new GridLayout(6,1,10,10));
-		p7 = new JPanel(new GridLayout(6,1,10,10));
-		p8 = new JPanel(new GridLayout(6,1,10,10));
-		p9 = new JPanel(new GridLayout(6,1,10,10));
-		p10 = new JPanel(new GridLayout(6,1,10,10));
-		p11 = new JPanel(new GridLayout(7,1,10,10));
-		p12 = new JPanel(new GridLayout(6,1,10,10));
-		p13 = new JPanel(new GridLayout(6,1,10,10));
-		
-		p14= new JPanel(new GridLayout(6,1,10,10));
-		p15= new JPanel(new GridLayout(6,1,10,10));
-		p16= new JPanel(new GridLayout(6,1,10,10));
-		p17= new JPanel(new GridLayout(6,1,10,10));
-		
-		b1 = new JButton("Login");
-		cl1 = new JButton("CLogin");
-		b2 = new JButton("New Account");
-		search = new JButton("Search Client");
-		logout = new JButton("Logout");
-		b3 = new JButton("Next");
-		b4 = new JButton("Withdrawals");
-		b5 = new JButton("Deposits");
-		b6 = new JButton("Pay Bills");
-		b7 = new JButton("Money Transfer");
-		b8 = new JButton("Check Balance");
-		b9 = new JButton("Transaction History");
-		back1= new JButton("Back");
-		back2= new JButton("Back");
-		back3= new JButton("Back");
-		back4= new JButton("Back");
-		back5= new JButton("Back");
-		back6= new JButton("Back");
-		back7= new JButton("Back");
-		withdraw = new JButton("Withdraw");
-		deposit = new JButton("Deposit");
-		pay = new JButton("Pay Bill");
-		
-		
-		l1 = new JLabel("Client Information Form");
-		name1 = new JLabel("Full Name");
-		contact1 = new JLabel("Contact");
-		email1 = new JLabel("Email");
-		password1 = new JLabel("Password");
-		accType1 = new JLabel("Account Type");
-		
-		login = new JTextField("Login");
-		pass = new JTextField("Password");
-		name2 = new JTextField();
-		contact2 = new JTextField();
-		email2 = new JTextField();
-		password2 = new JTextField();
-		accType2 = new JTextField();
-		security = new JTextField();	
-		name3 = new JTextField("Name");
-		search2 = new JButton("Search");
-		searchtf = new JTextField("Enter Client Name");
-		contact3= new JTextField("Contact");
-		email3 = new JTextField("Email");
-		address3 = new JTextField("Address");
-		modify = new JButton("Update");
-		delete= new JButton("Delete Client");
-		amount1 = new JTextField("Enter Amount");
-		amount2 = new JTextField("Enter Amount");
-		amount3 = new JTextField("Enter Bill Amount");
-		
-		b1.setFocusPainted(false);
-		b2.setFocusPainted(false);
-		b3.setFocusPainted(false);
-		b4.setFocusPainted(false);
-		b5.setFocusPainted(false);
-		b6.setFocusPainted(false);
-		b7.setFocusPainted(false);
-		b8.setFocusPainted(false);
-		b9.setFocusPainted(false);
+		initialize();
 		
 		//Login Screen
 		login();		    
-
+		
+		//Login to admin or client view: no function to get admin.
+		//The admin should be able to create a savings / chequing / credit account for a client
 	    b1.addActionListener(new ActionListener() {
 	      @Override
-	      public void actionPerformed(ActionEvent evt) {
-	    	  adminView();
+	      public void actionPerformed(ActionEvent evt) { 
+	    	
+	    	//System.out.println(login.getText()+" "+pass.getText());
+	    	Client c= new Client().getClientInfo(xml,login.getText());
+	    	
+	    	if(c.getPassword().equals(pass.getText()))
+	    	{
+	    		adminView();
+	    	}	
+	    	else
+	    		System.out.println("Error");
+	    		//display error message
 	      }
 	    });
 	    
@@ -196,12 +134,33 @@ public class Bank extends JFrame implements ActionListener
 		    }
 		});
 	      
-	    logout.addActionListener(new ActionListener() {
+	    logout1.addActionListener(new ActionListener() {
 	       @Override
 	       public void actionPerformed(ActionEvent evt){
 	           login();
 	       }
 	    });
+	    
+	    logout2.addActionListener(new ActionListener() {
+		   @Override
+		   public void actionPerformed(ActionEvent evt){
+		       login();
+		   }
+		 });
+	    
+	    update1.addActionListener(new ActionListener() {
+		   @Override
+		   public void actionPerformed(ActionEvent evt){
+			   updateView(); 
+		   }
+		 });  
+	    
+	    update2.addActionListener(new ActionListener() {
+		   @Override
+		   public void actionPerformed(ActionEvent evt){
+			   //update the client details 
+		   }
+		 });  
 	      
 	    back1.addActionListener(new ActionListener() {
 	       @Override
@@ -250,6 +209,13 @@ public class Bank extends JFrame implements ActionListener
 		   public void actionPerformed(ActionEvent evt) {
 		       clientView(); 
 		   }
+	    });	 
+	    
+	    back8.addActionListener(new ActionListener() {
+		   @Override
+		   public void actionPerformed(ActionEvent evt) {
+			   clientView();  
+		   }
 	    });
 	      
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
@@ -261,11 +227,11 @@ public class Bank extends JFrame implements ActionListener
 	public static void main(String[] args) throws Exception 
 	{
 		
-		XmlUtils xml = new XmlUtils();		
+		//XmlUtils xml = new XmlUtils();		
 		
-		Client cli = new Client(1,"Joao Victor","Guimaraes","j@gmail.com","Somewhere","joaovictor","123456");
-		cli.saving = new Saving(1,0,"Test");
-		cli.chequing = new Chequing(0,0,"Test");
+//		Client cli = new Client(1,"Joao Victor","Guimaraes","j@gmail.com","Somewhere","joaovictor","123456");
+//		cli.saving = new Saving(1,0,"Test");
+//		cli.chequing = new Chequing(0,0,"Test");
 		
 		//cli.createNewClient(xml, cli);
 		
@@ -298,8 +264,100 @@ public class Bank extends JFrame implements ActionListener
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//Auto-generated method stub
 		
+	}
+	
+	public void initialize()
+	{
+		p1 = new JPanel(new GridLayout(6,2,10,10));
+		p2 = new JPanel(new GridLayout(6,2,10,10));
+		p3 = new JPanel(new GridLayout(8,2,10,10)); 
+		p4 = new JPanel(new GridLayout(6,1,10,10));
+		p5 = new JPanel(new GridLayout(6,1,10,10));
+		p6 = new JPanel(new GridLayout(6,1,10,10));
+		p7 = new JPanel(new GridLayout(6,1,10,10));
+		p8 = new JPanel(new GridLayout(6,1,10,10));
+		p9 = new JPanel(new GridLayout(6,1,10,10));
+		p10 = new JPanel(new GridLayout(6,1,10,10));
+		p11 = new JPanel(new GridLayout(7,1,10,10));
+		p12 = new JPanel(new GridLayout(6,1,10,10));
+		p13 = new JPanel(new GridLayout(6,1,10,10));
+		
+		p14= new JPanel(new GridLayout(6,1,10,10));
+		p15= new JPanel(new GridLayout(6,1,10,10));
+		p16= new JPanel(new GridLayout(6,1,10,10));
+		p17= new JPanel(new GridLayout(6,1,10,10));
+		p18= new JPanel(new GridLayout(7,1,10,10));
+		
+		b1 = new JButton("Login");
+		cl1 = new JButton("CLogin");
+		b2 = new JButton("New Account");
+		search = new JButton("Search Client");
+		logout1 = new JButton("Logout");
+		logout2 = new JButton("Logout");
+		b3 = new JButton("Next");
+		b4 = new JButton("Withdrawals");
+		b5 = new JButton("Deposits");
+		b6 = new JButton("Pay Bills");
+		b7 = new JButton("Money Transfer");
+		b8 = new JButton("Check Balance");
+		b9 = new JButton("Transaction History");
+		back1= new JButton("Back");
+		back2= new JButton("Back");
+		back3= new JButton("Back");
+		back4= new JButton("Back");
+		back5= new JButton("Back");
+		back6= new JButton("Back");
+		back7= new JButton("Back");
+		back8= new JButton("Back");
+		withdraw = new JButton("Withdraw");
+		deposit = new JButton("Deposit");
+		pay = new JButton("Pay Bill");
+		checkBal = new JButton("Check Balance");
+		update1 = new JButton("Update");
+		update2 = new JButton("Update");
+		
+		
+		l1 = new JLabel("Client Information Form");
+		
+		login = new JTextField("Login");
+		pass = new JTextField("Password");
+		name1 = new JTextField("Full Name");
+		address1 = new JTextField("Address");
+		contact1 = new JTextField("Contact");
+		email1 = new JTextField("Email");
+		password1 = new JTextField("Password");
+		name2 = new JTextField();
+		address2 = new JTextField();
+		contact2 = new JTextField();
+		email2 = new JTextField();
+		password2 = new JTextField();
+		security = new JTextField("Answer Security Question");	
+		name3 = new JTextField("Name");
+		search2 = new JButton("Search");
+		searchtf = new JTextField("Enter Client Name");
+		contact3= new JTextField("Contact");
+		email3 = new JTextField("Email");
+		address3 = new JTextField("Address");
+		modify = new JButton("Update");
+		delete= new JButton("Delete Client");
+		amount1 = new JTextField("Enter Amount");
+		amount2 = new JTextField("Enter Amount");
+		amount3 = new JTextField("Enter Bill Amount");
+		senderA = new JTextField("Sender Account Number");
+		recieverA = new JTextField("Reciever Account Number");
+		securityQ = new JTextField();//set Text from Client
+		securityA = new JTextField("Type Answer");
+		
+		b1.setFocusPainted(false);
+		b2.setFocusPainted(false);
+		b3.setFocusPainted(false);
+		b4.setFocusPainted(false);
+		b5.setFocusPainted(false);
+		b6.setFocusPainted(false);
+		b7.setFocusPainted(false);
+		b8.setFocusPainted(false);
+		b9.setFocusPainted(false);
 	}
 	
 	public void login()
@@ -326,6 +384,8 @@ public class Bank extends JFrame implements ActionListener
 		p4.add(b7);
 		p4.add(b8);
 		p4.add(b9);
+		p4.add(update1);
+		p4.add(logout2);
 		add(p4);
    	 	revalidate();
    	 	repaint();
@@ -338,7 +398,7 @@ public class Bank extends JFrame implements ActionListener
         add(p2,BorderLayout.CENTER);
 		p2.add(b2);
 		p2.add(search);
-		p2.add(logout);
+		p2.add(logout1);
    	 	revalidate();
    	 	repaint();
 	}
@@ -349,15 +409,11 @@ public class Bank extends JFrame implements ActionListener
         setLayout(new BorderLayout());
         add(p3,BorderLayout.CENTER);
         p3.add(name1);
-		p3.add(name2);
 		p3.add(contact1);
-		p3.add(contact2);
 		p3.add(email1);
-		p3.add(email2);
+		p3.add(address1);
 		p3.add(password1);
-		p3.add(password2);
-		p3.add(accType1);
-		p3.add(accType2);
+		p3.add(cb25);
 		p3.add(cb1);
 		p3.add(security);
 		p3.add(b3);
@@ -429,6 +485,12 @@ public class Bank extends JFrame implements ActionListener
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
         add(p15,BorderLayout.CENTER);
+        p15.add(senderA);
+        p15.add(recieverA);
+        p15.add(cb26);
+        p15.add(securityQ);
+        p15.add(securityA);
+        p15.add(pay);
         p15.add(back5);
    	 	revalidate();
    	 	repaint();
@@ -439,6 +501,8 @@ public class Bank extends JFrame implements ActionListener
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
         add(p16,BorderLayout.CENTER);
+        p16.add(cb24);
+        p16.add(checkBal);
         p16.add(back6);
    	 	revalidate();
    	 	repaint();
@@ -451,6 +515,22 @@ public class Bank extends JFrame implements ActionListener
         setLayout(new BorderLayout());
         add(p17,BorderLayout.CENTER);
 		p17.add(back7);
+   	 	revalidate();
+   	 	repaint();
+	}
+	
+	public void updateView()
+	{
+		getContentPane().removeAll();
+        setLayout(new BorderLayout());
+        add(p18,BorderLayout.CENTER);
+        p18.add(name2);
+		p18.add(contact2);
+		p18.add(email2);
+		p18.add(address2);
+		p18.add(password2);
+		p18.add(update2);
+		p18.add(back8);
    	 	revalidate();
    	 	repaint();
 	}
