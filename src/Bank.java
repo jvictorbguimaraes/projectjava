@@ -15,7 +15,7 @@ public class Bank extends JFrame implements ActionListener
 	JLabel l1;
 	
 	XmlUtils xml = new XmlUtils();
-	Client c;
+	Client client;
 	
 	//Customer Variables
 	private JTextField login, pass, name1, contact1, email1, address1, password1, name2, contact2, email2, address2, password2, security,name3,contact3, email3,address3,searchtf,amount1,amount2,amount3;
@@ -45,18 +45,22 @@ public class Bank extends JFrame implements ActionListener
 		//Login Screen
 		login();		    
 		
-		//Login to admin or client view: no function to get admin.
 		//The admin should be able to create a savings / chequing / credit account for a client
 	    b1.addActionListener(new ActionListener() {
 	      @Override
 	      public void actionPerformed(ActionEvent evt) { 
 	    	
+	    	 
 	    	//System.out.println(login.getText()+" "+pass.getText());
-	    	c= new Client().getClientInfo(xml,login.getText());
+	    	client= new Client();
 	    	
-	    	if(c.getPassword().equals(pass.getText()))
+	    	if(client.validateLogin(xml, login.getText(), pass.getText()))
 	    	{
-	    		adminView();
+	    		client = client.getClientInfo(xml,login.getText());
+	    		if(client.isAdmin())
+	    			adminView();
+	    		else
+	    			clientView();
 	    	}	
 	    	else
 	    		System.out.println("Error");
@@ -90,6 +94,8 @@ public class Bank extends JFrame implements ActionListener
 	      public void actionPerformed(ActionEvent evt) {
 	        	 
 	        	 //create account on button press here
+	    	  Client newClient = new Client((int)Math.random(), name1.getText(),email1.getText(),address1.getText(),password1.getText(), false);
+	    	  newClient.createNewClient(xml, newClient);
 	      }
 	    });
 	      
@@ -134,6 +140,26 @@ public class Bank extends JFrame implements ActionListener
 	    	   transactionListView();
 		    }
 		});
+	    
+	    withdraw.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt){	        	 
+		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		    
+			    }
+			});
+	    pay.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt){	        	 
+		    	   client.getSaving().payBill(client, xml, 12345);
+			    }
+			});
+	    checkBal.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt){	        	 
+		    	  System.out.println( client.getSaving().getAccountBal());
+			    }
+			});
 	      
 	    logout1.addActionListener(new ActionListener() {
 	       @Override
@@ -341,7 +367,7 @@ public class Bank extends JFrame implements ActionListener
 		delete= new JButton("Delete Client");
 		amount1 = new JTextField("Enter Amount");
 		amount2 = new JTextField("Enter Amount");
-		amount3 = new JTextField("Enter Bill Amount");
+		amount3 = new JTextField("Enter Bill Number");
 		senderA = new JTextField("Sender Account Number");
 		recieverA = new JTextField("Reciever Account Number");
 		securityQ = new JTextField();//set Text from Client
@@ -470,7 +496,9 @@ public class Bank extends JFrame implements ActionListener
         setLayout(new BorderLayout());
         add(p14,BorderLayout.CENTER);
 		p14.add(cb23);
-		p14.add(cb3);
+		//add field for bill code
+		//add field for searching bill code
+		//p14.add(cb3);
 		p14.add(amount3);
 		p14.add(pay);
 		p14.add(back4);
@@ -512,6 +540,7 @@ public class Bank extends JFrame implements ActionListener
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
         add(p17,BorderLayout.CENTER);
+        //add account selection
 		p17.add(back7);
    	 	revalidate();
    	 	repaint();

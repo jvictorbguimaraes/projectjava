@@ -6,10 +6,10 @@ public class Client
 {
 	private int id;
 	private String name;
-	private String lastname;
 	private String email;
 	private String address;
 	private String password;
+	private boolean admin;
 	private Account saving;
 	private Account chequing;
 	private Credit credit;
@@ -20,15 +20,15 @@ public class Client
 		
 	}
 		
-	public Client(int id, String name, String lastname, String email, String address, String password) 
+	public Client(int id, String name,  String email, String address, String password, boolean admin) 
 	{
 		super();
 		this.id = id;
 		this.name = name;
-		this.lastname = lastname;
 		this.email = email;
 		this.address = address;
 		this.password = password;
+		this.admin = admin;
 	}
 
 	public int getId() 
@@ -56,14 +56,7 @@ public class Client
 	{
 		this.name = name;
 	}
-	public String getLastName() 
-	{
-		return lastname;
-	}
-	public void setLastName(String lastname) 
-	{
-		this.lastname = lastname;
-	}	
+		
 	
 	public String getEmail() {
 		return email;
@@ -91,12 +84,13 @@ public class Client
 		this.password = password;
 	}	
 	
-	public String getLastname() {
-		return lastname;
+
+	public boolean isAdmin() {
+		return admin;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
 	public Account getSaving() {
@@ -148,7 +142,6 @@ public class Client
 	public void updateClientInfo(XmlUtils xml, Client client){
 		try {
 			xml.changeNodeValue(client.nodeElement, "Name", client.name);
-			xml.changeNodeValue(client.nodeElement, "LastName", client.lastname);
 			xml.changeNodeValue(client.nodeElement, "Email", client.email);
 			xml.changeNodeValue(client.nodeElement, "Address", client.address);
 			xml.changeNodeValue(client.nodeElement, "Password", client.password);		
@@ -163,29 +156,29 @@ public class Client
 	{
 		try {
 			Element element = xml.createNewElement("Bank","Client");
-			xml.createChildElement(element, "Id", String.valueOf(client.id));
+			xml.createChildElement(element, "Id", String.valueOf(Math.round(Math.random()*100)));
 			xml.createChildElement(element, "Name", client.name);
-			xml.createChildElement(element, "LastName", client.lastname);
 			xml.createChildElement(element, "Email", client.email);
 			xml.createChildElement(element, "Address", client.address);
 			xml.createChildElement(element, "Password", client.password);
 			xml.createChildElement(element, "Admin", "False");
 			
 			Element saving = xml.createNewParentElement(element,"Saving");
-			xml.createChildElement(saving, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(saving, "Number", String.valueOf(Math.round(Math.random()*100)));
 			xml.createChildElement(saving, "Balance", "0");
 			xml.createNewParentElement(saving,"Transactions");
 			
 			Element chequing = xml.createNewParentElement(element,"Chequing");
-			xml.createChildElement(chequing, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(chequing, "Number", String.valueOf(Math.round(Math.random()*100)));
 			xml.createChildElement(chequing, "Balance", "0");
 			xml.createNewParentElement(chequing,"Transactions");
 			
 			Element credit = xml.createNewParentElement(element,"Credit");
-			xml.createChildElement(credit, "Number", String.valueOf(Math.random()));
+			xml.createChildElement(credit, "Number", String.valueOf(Math.round(Math.random()*100)));
 			xml.createChildElement(credit, "Balance", "0");
 			xml.createChildElement(credit, "CredScore", "0");
-			xml.createChildElement(credit, "CredLimit", String.valueOf(client.credit.getCredLimit()));
+			xml.createChildElement(credit, "CredLimit", "500");
+			//xml.createChildElement(credit, "CredLimit", String.valueOf(client.credit.getCredLimit()));
 			xml.createNewParentElement(credit,"Transactions");
 			
 			xml.updateXml();
@@ -194,7 +187,7 @@ public class Client
 		}
 	}
 	
-	public Client getClientInfo(XmlUtils xml, String name)
+	public Client getClientInfo(XmlUtils xml, String email)
 	{
 		Client cli = new Client();
 		try{
@@ -205,15 +198,15 @@ public class Client
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
 					cli.nodeElement = elem;
-					if(elem.getElementsByTagName("Name").item(0).getTextContent().equalsIgnoreCase(name)){
+					if(elem.getElementsByTagName("Email").item(0).getTextContent().equalsIgnoreCase(email)){
 						cli.id = xml.getIntValue(elem,"Id");
 						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
-						cli.lastname = elem.getElementsByTagName("LastName").item(0).getTextContent();
 						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
 						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
+						cli.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
 						
 						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){					
-							NodeList saving = elem.getElementsByTagName("Savings");
+							NodeList saving = elem.getElementsByTagName("Saving");
 							Element savingElem = (Element) saving.item(0);
 							
 							cli.saving = new Saving();

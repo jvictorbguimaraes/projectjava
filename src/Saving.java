@@ -33,7 +33,7 @@ public class Saving extends Account
 				super.accountBal = (super.accountBal - amount) * 1.15 + minCharge;
 			}
 			
-			NodeList saving = cli.getNodeElement().getElementsByTagName("Savings");
+			NodeList saving = cli.getNodeElement().getElementsByTagName("Saving");
 			Element savElem = (Element) saving.item(0);
 			xml.changeNodeValue(savElem, "Balance", String.valueOf(super.accountBal));
 			Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);

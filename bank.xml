@@ -1,22 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Bank><Client><Name>Joao Victor</Name><LastName>Guimaraes</LastName><Address>Somewhere</Address><Username>joaovictor</Username><Password>123456</Password>
-	<Id>1</Id>
-	<Email>
-		</Email><Admin>False</Admin><Savings>
-			<Number>123456</Number>
-			<Balance>1495.0</Balance>
-			<Transactions><Deposit><ID>0</ID><Date>Sat Oct 05 22:20:05 EDT 2019</Date><Amount>1500.0</Amount></Deposit></Transactions></Savings>
-	<Chequing>
-		<Number>54354543</Number>
-		<Balance>-1072.5</Balance></Chequing>
-	<Credit>
-		<Number>5648</Number>
-		<Balance>250</Balance>
-		<Limit>1000</Limit>
-		<Score>320</Score></Credit></Client>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Bank>
 	<Bills>
 		<Bill>
 			<ID>12345</ID>
-			<Value>1500</Value>
+			<Value>20</Value>
 			<Type>Phone</Type>
 			<Paid>True</Paid></Bill>
 		<Bill>
@@ -25,4 +11,4 @@
 				</ID>
 			<Value>500</Value>
 			<Type>Hydro</Type>
-			<Paid>False</Paid></Bill></Bills></Bank>
+			<Paid>False</Paid></Bill></Bills><Client><Id>0</Id><Name>esha shetty</Name><Email>esh@gmail.com</Email><Address>gejgdue</Address><Password>123456</Password><Admin>True</Admin><Saving><Number>5</Number><Balance>0</Balance><Transactions/></Saving><Chequing><Number>4</Number><Balance>0</Balance><Transactions/></Chequing><Credit><Number>7</Number><Balance>0</Balance><CredScore>0</CredScore><CredLimit>500</CredLimit><Transactions/></Credit></Client><Client><Id>10</Id><Name>Full Name</Name><Email>Login</Email><Address>Address</Address><Password>Password</Password><Admin>False</Admin><Saving><Number>12</Number><Balance>75.0</Balance><Transactions><Withdraw><ID>0</ID><Date>Sun Oct 06 16:39:52 EDT 2019</Date><Amount>34.0</Amount></Withdraw><Withdraw><ID>0</ID><Date>Sun Oct 06 16:41:35 EDT 2019</Date><Amount>100.0</Amount></Withdraw><Withdraw><ID>0</ID><Date>Sun Oct 06 17:11:11 EDT 2019</Date><Amount>20.0</Amount></Withdraw></Transactions></Saving><Chequing><Number>51</Number><Balance>0</Balance><Transactions/></Chequing><Credit><Number>4</Number><Balance>0</Balance><CredScore>0</CredScore><CredLimit>500</CredLimit><Transactions/></Credit></Client></Bank>
