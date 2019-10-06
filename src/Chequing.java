@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -33,5 +35,21 @@ public class Chequing extends Account
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public void deposit(Client cli, XmlUtils xml, double amount) {
+		try {
+			this.accountBal += amount;
+			NodeList chequing = cli.getNodeElement().getElementsByTagName("Chequing");
+			Element cheqElem = (Element) chequing.item(0);
+			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));		
+			Transaction trans = new Deposit((int)Math.random(), new Date(), amount);
+			trans.addTransaction(cli, xml, cheqElem);
+			xml.updateXml();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}	
 }

@@ -263,13 +263,13 @@ public class Bank extends JFrame implements ActionListener
 		
 		XmlUtils xml = new XmlUtils();		
 		
-		Client cli = new Client(1,"Joao Victor","Guimaraes","j@gmail.com","Somewhere","joaovictor","123456");
-		cli.saving = new Saving(1,0,"Test");
-		cli.chequing = new Chequing(0,0,"Test");
+		Client cli = new Client();
+		cli = cli.getClientInfo(xml, "Joao Victor");
+		cli.getSaving().deposit(cli, xml, 1500);
 		
 		//cli.createNewClient(xml, cli);
 		
-		//System.out.print(cli.getClientInfo(xml, "Joao Victor"));
+		//System.out.print();
 		
 //		NodeList list = xml.getElementsByTagName("Client");
 //		
