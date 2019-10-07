@@ -12,8 +12,8 @@ public class MoneyTransfer extends Transaction {
 	}
 
 
-	public MoneyTransfer(int iD, Date transDate, double amount, int rAcountNo) {
-		super(iD, transDate, amount);
+	public MoneyTransfer(int id, double amount, int rAcountNo) {
+		super(id, amount);
 		RAcountNo = rAcountNo;
 	}
 
@@ -32,7 +32,7 @@ public class MoneyTransfer extends Transaction {
 			Element transElem = (Element) trans.item(0);
 			Element transfer = xml.createNewParentElement(transElem,"MoneyTransfer");
 			xml.createChildElement(transfer, "ID", String.valueOf(super.id));
-			xml.createChildElement(transfer, "Date", super.TransDate.toString());
+			xml.createChildElement(transfer, "Date", super.date);
 			xml.createChildElement(transfer, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {
 			e.printStackTrace();

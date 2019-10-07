@@ -9,8 +9,8 @@ public class Deposit extends Transaction{
 		super();
 	}
 	
-	public Deposit(int id, Date transDate, double amount) {
-		super(id, transDate, amount);
+	public Deposit(int id, double amount) {
+		super(id, amount);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,7 +21,7 @@ public class Deposit extends Transaction{
 			Element transElem = (Element) trans.item(0);
 			Element deposit = xml.createNewParentElement(transElem,"Deposit");
 			xml.createChildElement(deposit, "ID", String.valueOf(super.id));
-			xml.createChildElement(deposit, "Date", super.TransDate.toString());
+			xml.createChildElement(deposit, "Date", super.date);
 			xml.createChildElement(deposit, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {
 			e.printStackTrace();
