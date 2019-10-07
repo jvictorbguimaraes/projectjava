@@ -12,12 +12,12 @@ public class Bank extends JFrame implements ActionListener
 	//private variables
 	JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17,p18, cont,pan;
 	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9,reset,payB,checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, search, logout1,logout2,pay;
-	JPanel np1,np2,np3,np4,np5,np6,np7,np8;
+	JPanel np1,np2,np3,np4,np5,np6,np7,np8,np9,np10;
 	JPanel sp1,sp2,sp3;
 	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11;
 	JLabel er1,er2,er3,er4,er5;
 	JLabel s1,s2,s3,s4;
-	JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21;
+	JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26;
 	
 	   String data[][]={ {"101","Amit","670000"},    
                {"102","Jai","780000"},    
@@ -358,6 +358,8 @@ public class Bank extends JFrame implements ActionListener
 		np6= new JPanel(new GridLayout(1,1,10,10));
 		np7= new JPanel(new GridLayout(1,1,10,10));
 		np8= new JPanel(new GridLayout(1,1,10,10));
+		np9= new JPanel(new GridLayout(1,3,10,10));
+		np10= new JPanel(new GridLayout(1,1,10,10));
 		
 		sp1= new JPanel(new GridLayout(2,1,10,10));
 		sp2= new JPanel(new GridLayout(2,1,10,10));
@@ -383,6 +385,11 @@ public class Bank extends JFrame implements ActionListener
 		f19 = new JLabel("Select Security Question");
 		f20 = new JLabel("Enter Amount");
 		f21 = new JLabel("Select Account");
+		f22 = new JLabel("Enter Client Name");
+		f23 = new JLabel("Name");
+		f24 = new JLabel("Contact");
+		f25 = new JLabel("Email");
+		f26 = new JLabel("Address");
 		
 		b1 = new JButton("Login");
 		b2 = new JButton("New Account");
@@ -413,6 +420,9 @@ public class Bank extends JFrame implements ActionListener
 		update1 = new JButton("Update");
 		update2 = new JButton("Update");
 		reset = new JButton("Reset");
+		search2 = new JButton("Search");
+		modify = new JButton("Update");
+		delete= new JButton("Delete Client");		
 		
 		
 		l1 = new JLabel("TORONTO BANKING");
@@ -450,14 +460,11 @@ public class Bank extends JFrame implements ActionListener
 		email2 = new JTextField("");
 		password2 = new JTextField("");
 		security = new JTextField("");	
-		name3 = new JTextField("Name");
-		search2 = new JButton("Search");
-		searchtf = new JTextField("Enter Client Name");
-		contact3= new JTextField("Contact");
-		email3 = new JTextField("Email");
-		address3 = new JTextField("Address");
-		modify = new JButton("Update");
-		delete= new JButton("Delete Client");
+		name3 = new JTextField("");
+		searchtf = new JTextField("");
+		contact3= new JTextField("");
+		email3 = new JTextField("");
+		address3 = new JTextField("");
 		amount1 = new JTextField("");
 		amount2 = new JTextField("");
 		amount3 = new JTextField("Enter Bill Number");
@@ -596,14 +603,21 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
+        add(np9,BorderLayout.NORTH);
         add(p11,BorderLayout.CENTER);
         p11.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        np9.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         //add jlist item to p11
-        p11.add(searchtf);
-      	p11.add(search2);
+        np9.add(f22);
+        np9.add(searchtf);
+      	np9.add(search2);
+        p11.add(f23);
       	p11.add(name3); 
+        p11.add(f24);
       	p11.add(contact3);
+        p11.add(f25);
       	p11.add(email3);
+        p11.add(f26);
       	p11.add(address3);
       	p11.add(modify);
       	p11.add(delete);
