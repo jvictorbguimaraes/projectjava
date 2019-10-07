@@ -11,13 +11,22 @@ public class Bank extends JFrame implements ActionListener
 	
 	//private variables
 	JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17,p18, cont,pan;
-	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, search, logout1,logout2,pay;
-	JPanel np1,np2,np3;
-	JPanel sp1;
-	JLabel l1,l2,l3,l4,l5,l6,l7,l8;
-	JLabel er1,er2,er3;
-	JLabel s1,s2;
-	JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19;
+	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9,reset,payB,checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, search, logout1,logout2,pay;
+	JPanel np1,np2,np3,np4,np5,np6,np7,np8;
+	JPanel sp1,sp2,sp3;
+	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11;
+	JLabel er1,er2,er3,er4,er5;
+	JLabel s1,s2,s3,s4;
+	JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21;
+	
+	   String data[][]={ {"101","Amit","670000"},    
+               {"102","Jai","780000"},    
+               {"101","Sachin","700000"}};    
+		String column[]={"ID","NAME","SALARY"};         
+		JTable jt=new JTable(data,column);    
+		
+		JScrollPane sp=new JScrollPane(jt);    
+	
 	
 	XmlUtils xml = new XmlUtils();
 	Client client;
@@ -46,6 +55,7 @@ public class Bank extends JFrame implements ActionListener
 	public Bank()
 	{
 		initialize();
+		
 		
 		//Login Screen
 		login();		    
@@ -95,16 +105,29 @@ public class Bank extends JFrame implements ActionListener
 	      public void actionPerformed(ActionEvent evt) {
 	        	 
 	    	  //validation
-	    	  if(name1.getText()==""&&contact1.getText()==""&&email1.getText()==""&&address1.getText()==""&&password1.getText()==""&&security.getText()=="")
+	    	  er3.setForeground (Color.red);
+	    	  s2.setForeground(Color.green);
+	    	  if(name1.getText().equals("")||contact1.getText().equals("")||email1.getText().equals("")||address1.getText().equals("")||password1.getText().equals("")||security.getText().equals(""))
+	    		  er3.setText("Error: All fields are mandatory!");
+	    	  else if(checkFormat(email1.getText())==false)
+	    		  er3.setText("Error: Incorrect email format");
+	    	  else
 	    	  {
-	    		  er3.setForeground (Color.red);
-	    		  er3.setText("Empty Fields");
+	    		  er3.setText("");
+	    		  s2.setText("Customer account created successfully!");
+		    	  Client newClient = new Client((int)Math.random(), name1.getText(),email1.getText(),address1.getText(),password1.getText(), false);
+		    	  newClient.createNewClient(xml, newClient);
 	    	  }
-	        	 //create account on button press here
-	    	  Client newClient = new Client((int)Math.random(), name1.getText(),email1.getText(),address1.getText(),password1.getText(), false);
-	    	  newClient.createNewClient(xml, newClient);
 	      }
 	    });
+	    
+	    reset.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt) {
+		    	   resetFields();
+		       }
+		    });
+		      
 	      
 	    b4.addActionListener(new ActionListener() {
 	       @Override
@@ -154,10 +177,22 @@ public class Bank extends JFrame implements ActionListener
 		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
 		    	   //check validation if no money then set error text
 		    	   s1.setForeground (Color.green);
-		    	   s1.setText("Withdraw Successful! Please collect your money");
+		    	   s1.setText("Withdraw Successful!");
 		    
 			    }
 			});
+	    
+	    deposit.addActionListener(new ActionListener() {
+			       @Override
+			       public void actionPerformed(ActionEvent evt){	        	 
+			    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount2.getText()));
+			    	   //check validation if no money then set error text
+			    	   s4.setForeground (Color.green);
+			    	   s4.setText("Deposit Successful!");
+			    
+				    }
+				});
+	    
 	    pay.addActionListener(new ActionListener() {
 		       @Override
 		       public void actionPerformed(ActionEvent evt){	        	 
@@ -261,10 +296,16 @@ public class Bank extends JFrame implements ActionListener
 		    	   adminView();	 
 		       }
 		    });
+	    securityA.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                securityA.setText("");
+            }
+        });
 	    	      
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 	    setTitle("Banking System"); 
-	    setSize(450, 450);  
+	    setSize(450, 600);  
 	    setVisible(true);  
 	}
 
@@ -287,7 +328,7 @@ public class Bank extends JFrame implements ActionListener
 	
 	public void initialize()
 	{
-		p1 = new JPanel(new GridLayout(4,1,10,10));
+		p1 = new JPanel(new GridLayout(6,1,10,10));
 		p2 = new JPanel(new GridLayout(5,2,10,10));
 		p3 = new JPanel(new GridLayout(10,2,10,10)); 
 		p4 = new JPanel(new GridLayout(5,4,10,10));
@@ -298,19 +339,25 @@ public class Bank extends JFrame implements ActionListener
 		p9 = new JPanel(new GridLayout(10,1,10,10));
 		p10 = new JPanel(new GridLayout(10,1,10,10));
 		p11 = new JPanel(new GridLayout(10,1,10,10));
-		p12 = new JPanel(new GridLayout(6,1,10,10));
-		p13 = new JPanel(new GridLayout(10,1,10,10));
+		p12 = new JPanel(new GridLayout(6,2,10,10));
+		p13 = new JPanel(new GridLayout(6,2,10,10));
 		p14= new JPanel(new GridLayout(10,1,10,10));
-		p15= new JPanel(new GridLayout(10,1,10,10));
-		p16= new JPanel(new GridLayout(10,1,10,10));
+		p15= new JPanel(new GridLayout(7,2,10,10));
+		p16= new JPanel(new GridLayout(6,1,10,10));
 		p17= new JPanel(new GridLayout(10,1,10,10));
 		p18= new JPanel(new GridLayout(10,1,10,10));
 		
 		np1= new JPanel(new GridLayout(3,1,10,10));
 		np2= new JPanel(new GridLayout(1,1,10,10));
 		np3= new JPanel(new GridLayout(1,1,10,10));
+		np4= new JPanel(new GridLayout(1,1,10,10));
+		np5= new JPanel(new GridLayout(1,1,10,10));
+		np6= new JPanel(new GridLayout(1,1,10,10));
+		np7= new JPanel(new GridLayout(1,1,10,10));
+		np8= new JPanel(new GridLayout(1,1,10,10));
 		
 		sp1= new JPanel(new GridLayout(2,1,10,10));
+		sp2= new JPanel(new GridLayout(2,1,10,10));
 		
 		f1 = new JLabel("Email");
 		f2 = new JLabel("Password");
@@ -331,6 +378,8 @@ public class Bank extends JFrame implements ActionListener
 		f17 = new JLabel("Enter Security Answer");
 		f18 = new JLabel("Select Account");
 		f19 = new JLabel("Select Security Question");
+		f20 = new JLabel("Enter Amount");
+		f21 = new JLabel("Select Account");
 		
 		b1 = new JButton("Login");
 		b2 = new JButton("New Account");
@@ -355,10 +404,12 @@ public class Bank extends JFrame implements ActionListener
 		back9= new JButton("Back");
 		withdraw = new JButton("Withdraw");
 		deposit = new JButton("Deposit");
-		pay = new JButton("Pay Bill");
+		pay = new JButton("Transfer");
+		payB = new JButton("Pay Bill");
 		checkBal = new JButton("Check Balance");
 		update1 = new JButton("Update");
 		update2 = new JButton("Update");
+		reset = new JButton("Reset");
 		
 		
 		l1 = new JLabel("TORONTO BANKING");
@@ -368,11 +419,19 @@ public class Bank extends JFrame implements ActionListener
 		l5 = new JLabel("Withdraw Money from (Chequing, Savings or Credit)");
 		l6 = new JLabel("Welcome Admin! Select one of the following funtions.");
 		l7 = new JLabel("Enter Client Details");
-		l8 = new JLabel("TORONTO BANKING");
+		l8 = new JLabel("Deposit Money into (Chequing, Savings or Credit)");
+		l9 = new JLabel("Pay Your Bills");
+		l10 = new JLabel("Transfer Money");
+		l11= new JLabel("Check your Account Balance");
 		er1 = new JLabel(" ");
 		er2 = new JLabel(" ");
 		er3 = new JLabel(" ");
+		er4 = new JLabel(" ");
+		er5 = new JLabel(" ");
 		s1 = new JLabel(" ");
+		s2 = new JLabel(" ");
+		s3 = new JLabel(" ");
+		s4 = new JLabel(" ");
 		
 		
 		login = new JTextField("");
@@ -396,13 +455,13 @@ public class Bank extends JFrame implements ActionListener
 		address3 = new JTextField("Address");
 		modify = new JButton("Update");
 		delete= new JButton("Delete Client");
-		amount1 = new JTextField("Enter Amount");
-		amount2 = new JTextField("Enter Amount");
+		amount1 = new JTextField("");
+		amount2 = new JTextField("");
 		amount3 = new JTextField("Enter Bill Number");
-		senderA = new JTextField("Sender Account Number");
-		recieverA = new JTextField("Reciever Account Number");
+		senderA = new JTextField("");
+		recieverA = new JTextField("");
 		securityQ = new JTextField();//set Text from Client
-		securityA = new JTextField("Type Answer");
+		securityA = new JTextField("Type Answer...");
 		
 		b1.setFocusPainted(false);
 		b2.setFocusPainted(false);
@@ -439,7 +498,7 @@ public class Bank extends JFrame implements ActionListener
 		p1.add(login);
 		p1.add(f2);
 		p1.add(pass);
-		sp1.add(b1);
+		p1.add(b1);
 		sp1.add(er1);
 		er1.setText(" ");
 		revalidate();
@@ -488,11 +547,14 @@ public class Bank extends JFrame implements ActionListener
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
         add(np3,BorderLayout.NORTH);
+        add(sp2,BorderLayout.SOUTH);
         add(p3,BorderLayout.CENTER);
         np3.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 10));
         p3.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        sp2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         np3.add(l7);
-        np3.add(er3);
+        sp2.add(er3);
+        sp2.add(s2);
         p3.add(f3);
         p3.add(name1);
         p3.add(f4);
@@ -511,9 +573,20 @@ public class Bank extends JFrame implements ActionListener
 		p3.add(security);
 		p3.add(b3);
 		p3.add(back9);
-		//er3.setText("");
-   	 	revalidate();
+		p3.add(reset);
+		revalidate();
    	 	repaint();
+	}
+	public void resetFields()
+	{
+		name1.setText("");
+		contact1.setText("");
+		email1.setText("");
+		address1.setText("");
+		password1.setText("");
+		security.setText("");
+		er3.setText("");
+		s2.setText("");
 	}
 	
 	public void searchClient()
@@ -540,12 +613,14 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
-        add(np3,BorderLayout.NORTH);
+        add(np4,BorderLayout.NORTH);
         add(p12,BorderLayout.CENTER);
-        np3.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        np4.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         p12.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        np3.add(l5);
+        np4.add(l5);
+        p12.add(f10);
 		p12.add(cb21);
+		p12.add(f11);
 		p12.add(amount1);
 		p12.add(withdraw);
 		p12.add(back2);
@@ -561,12 +636,21 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
+        add(np5,BorderLayout.NORTH);
         add(p13,BorderLayout.CENTER);
+        np5.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         p13.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        np5.add(l8);
+        p13.add(f21);
 		p13.add(cb22);
+		p13.add(f20);
 		p13.add(amount2);
 		p13.add(deposit);
 		p13.add(back3);
+		p13.add(s4);
+		p13.add(er5);
+		er5.setText(" ");
+		s4.setText(" ");
    	 	revalidate();
    	 	repaint();
 	}
@@ -575,14 +659,17 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
+        add(np6,BorderLayout.NORTH);
         add(p14,BorderLayout.CENTER);
         p14.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        np6.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        np6.add(l9);
 		p14.add(cb23);
 		//add field for bill code
 		//add field for searching bill code
 		//p14.add(cb3);
 		p14.add(amount3);
-		p14.add(pay);
+		p14.add(payB);
 		p14.add(back4);
    	 	revalidate();
    	 	repaint();
@@ -592,12 +679,20 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
+        add(np7,BorderLayout.NORTH);
         add(p15,BorderLayout.CENTER);
         p15.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        np7.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        np7.add(l10);
+        p15.add(f13);
         p15.add(senderA);
+        p15.add(f14);
         p15.add(recieverA);
+        p15.add(f15);
         p15.add(cb26);
-        p15.add(securityQ);
+        //p15.add();
+        //p15.add(securityQ);
+        p15.add(f16);
         p15.add(securityA);
         p15.add(pay);
         p15.add(back5);
@@ -609,8 +704,12 @@ public class Bank extends JFrame implements ActionListener
 	{
 		getContentPane().removeAll();
         setLayout(new BorderLayout());
+        add(np8,BorderLayout.NORTH);
         add(p16,BorderLayout.CENTER);
         p16.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        np8.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        np8.add(l11);
+        p16.add(f12);
         p16.add(cb24);
         p16.add(checkBal);
         p16.add(back6);
@@ -626,6 +725,7 @@ public class Bank extends JFrame implements ActionListener
         p17.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(p17,BorderLayout.CENTER);
         //add account selection
+        p17.add(sp);
 		p17.add(back7);
    	 	revalidate();
    	 	repaint();
@@ -646,6 +746,12 @@ public class Bank extends JFrame implements ActionListener
 		p18.add(back8);
    	 	revalidate();
    	 	repaint();
+	}
+	
+	public boolean checkFormat(String email)
+	{
+		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+		return email.matches(regex);
 	}
 
 }//class ends
