@@ -31,7 +31,7 @@ public class Chequing extends Account
 			Element cheqElem = (Element) chequing.item(0);
 			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(super.accountBal));
 			if(addTransaction){
-				Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
+				Transaction trans = new Withdraw((int)Math.random(), amount);
 				trans.addTransaction(cli, xml, cheqElem);
 				xml.updateXml();
 			}			
@@ -50,7 +50,7 @@ public class Chequing extends Account
 			Element cheqElem = (Element) chequing.item(0);
 			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));	
 			if(transfer){
-				Transaction trans = new Deposit((int)Math.random(), new Date(), amount);
+				Transaction trans = new Deposit((int)Math.random(), amount);
 				trans.addTransaction(cli, xml, cheqElem);
 				xml.updateXml();
 			}
@@ -58,10 +58,4 @@ public class Chequing extends Account
 			e.printStackTrace();
 		}		
 	}
-
-	@Override
-	public ArrayList<Transaction> getTransactions(XmlUtils xml, Element element) {
-		return null;
-		
-	}	
 }

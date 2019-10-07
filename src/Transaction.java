@@ -1,11 +1,13 @@
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.w3c.dom.Element;
 
 public abstract class Transaction{
 		
+	private SimpleDateFormat f = new SimpleDateFormat("MM/dd/yyyy");
 	protected int id;
-	protected Date TransDate;
+	protected String date;
 	protected double amount;
 	
 	public int getID() {
@@ -14,11 +16,11 @@ public abstract class Transaction{
 	public void setID(int id) {
 		this.id = id;
 	}
-	public Date getTransDate() {
-		return TransDate;
+	public String getTransDate() {
+		return date;
 	}
-	public void setTransDate(Date transDate) {
-		TransDate = transDate;
+	public void setTransDate(String date) {
+		this.date = date;
 	}
 	public double getAmount() {
 		return amount;
@@ -29,19 +31,20 @@ public abstract class Transaction{
 	
 	@Override
 	public String toString() {
-		return "Transactions [ID=" + id + ", TransDate=" + TransDate + ", amount=" + amount
+		return "Transactions [ID=" + id + ", date=" + date + ", amount=" + amount
 				+ "]";
 	}
 	
 	public Transaction(){
-		
+		this.date = f.format(new Date());
 	}
 	
-	public Transaction(int id, Date transDate, double amount) {
+	public Transaction(int id, double amount) {
 		super();
 		this.id = id;
-		TransDate = transDate;
+		this.date = f.format(new Date());
 		this.amount = amount;
+		
 	}
 	
 	public abstract void addTransaction(Client cli, XmlUtils xml, Element element);

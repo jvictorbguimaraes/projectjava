@@ -47,7 +47,7 @@ public class Credit extends Account
 				Element credElem = (Element) cred.item(0);
 				xml.changeNodeValue(credElem, "Balance", String.valueOf(super.accountBal));
 				if(addTransaction){
-					Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
+					Transaction trans = new Withdraw((int)Math.random(), amount);
 					trans.addTransaction(cli, xml, credElem);
 					xml.updateXml();
 				}				
@@ -62,11 +62,5 @@ public class Credit extends Account
 	@Override
 	public void deposit(Client cli, XmlUtils xml, double amount, boolean addTransaction) {
 				
-	}
-
-	@Override
-	public ArrayList<Transaction> getTransactions(XmlUtils xml, Element element) {
-		return null;
-		
 	}
 }

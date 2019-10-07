@@ -9,9 +9,8 @@ public class Withdraw extends Transaction {
 		super();
 	}
 	
-	public Withdraw(int iD, Date transDate, double amount) {
-		super(iD, transDate, amount);
-		// TODO Auto-generated constructor stub
+	public Withdraw(int id, double amount) {
+		super(id, amount);
 	}
 
 	@Override
@@ -21,7 +20,7 @@ public class Withdraw extends Transaction {
 			Element transElem = (Element) trans.item(0);
 			Element withdraw = xml.createNewParentElement(transElem,"Withdraw");
 			xml.createChildElement(withdraw, "ID", String.valueOf(super.id));
-			xml.createChildElement(withdraw, "Date", super.TransDate.toString());
+			xml.createChildElement(withdraw, "Date", super.date);
 			xml.createChildElement(withdraw, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {
 			e.printStackTrace();

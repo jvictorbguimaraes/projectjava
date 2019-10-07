@@ -38,9 +38,9 @@ public class BillPayment extends Transaction {
 		
 	}
 	
-	public BillPayment(int iD, Date transDate, double amount, String billType,
+	public BillPayment(int iD, double amount, String billType,
 			int billNo) {
-		super(iD, transDate, amount);
+		super(iD, amount);
 		BillType = billType;
 		BillNo = billNo;
 	}
@@ -95,7 +95,7 @@ public class BillPayment extends Transaction {
 			Element transElem = (Element) trans.item(0);
 			Element bill = xml.createNewParentElement(transElem,"BillPayment");
 			xml.createChildElement(bill, "ID", String.valueOf(super.id));
-			xml.createChildElement(bill, "Date", super.TransDate.toString());
+			xml.createChildElement(bill, "Date", super.date);
 			xml.createChildElement(bill, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {
 			e.printStackTrace();

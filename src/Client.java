@@ -308,6 +308,7 @@ public class Client
 							cli.saving = new Saving();
 							cli.saving.setAccountNum(xml.getIntValue(savingElem, "Number"));
 							cli.saving.setAccountBal(xml.getDoubleValue(savingElem, "Balance"));
+							cli.saving.getTransactions(xml, savingElem);
 							
 							NodeList chequing = elem.getElementsByTagName("Chequing");
 							Element cheqElem = (Element) chequing.item(0);
@@ -315,7 +316,7 @@ public class Client
 							cli.chequing = new Chequing();
 							cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
 							cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
-							//cli.chequing.getTransactions(xml, cheqElem);
+							cli.chequing.getTransactions(xml, cheqElem);
 						}
 						break;
 					}

@@ -17,6 +17,7 @@ public abstract class Account
 	//unparameterized constructor
 	public Account()
 	{
+		transactions = new ArrayList<Transaction>();
 		accountNum=0;
 		accountBal=0;
 		accountPlan=null;
@@ -25,6 +26,7 @@ public abstract class Account
 	//parameterized constructor
 	public Account(int accountNum, double accountBal, String accountPlan)
 	{
+		transactions = new ArrayList<Transaction>();
 		this.accountNum=accountNum;
 		this.accountBal=accountBal;
 		this.accountPlan=accountPlan;
@@ -74,7 +76,43 @@ public abstract class Account
 	
 	public abstract void deposit(Client cli, XmlUtils xml, double amount, boolean transfer);
 	
-	public abstract ArrayList<Transaction> getTransactions(XmlUtils xml, Element element);
+	public void getTransactions(XmlUtils xml, Element element){
+		ArrayList<Transaction> transList = new ArrayList<Transaction>();
+		NodeList list = element.getElementsByTagName("Transactions");		
+		Transaction trans;
+		Node node = list.item(0);
+		
+		if(node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes()){
+			Element elem = (Element) node;
+			list = elem.getChildNodes();
+			for(int i=0; i< list.getLength(); i++){	
+				Node nChild = list.item(0);
+				Element child = (Element) nChild;
+				if(nChild.getNodeName().equalsIgnoreCase("Deposit")){
+					trans = new Deposit();
+					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
+					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					transList.add(trans);					
+				}else if(nChild.getNodeName().equalsIgnoreCase("Withdraw")){
+					trans = new Withdraw();
+					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
+					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					transList.add(trans);
+				}else if(nChild.getNodeName().equalsIgnoreCase("BillPayment")){
+					trans = new BillPayment();
+					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
+					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					transList.add(trans);
+				}else{
+					trans = new MoneyTransfer();
+					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
+					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					transList.add(trans);
+				}
+			}
+		}
+		setTransactions(transList);
+	}
 	
 	public String payBill(Client cli, XmlUtils xml, int billId) {
 		try {			
@@ -118,10 +156,10 @@ public abstract class Account
 					
 					withdraw(client,xml,amount,false);
 					
-					Transaction trans = new MoneyTransfer((int)Math.random(), new Date(), amount * -1, accountNo);
+					Transaction trans = new MoneyTransfer((int)Math.random(), amount * -1, accountNo);
 					trans.addTransaction(client, xml, client.getNodeElement());
 					
-					trans = new MoneyTransfer((int)Math.random(), new Date(), amount, this.accountNum);
+					trans = new MoneyTransfer((int)Math.random(), amount, this.accountNum);
 					trans.addTransaction(sentClient, xml, elem);
 					
 					xml.updateXml();
