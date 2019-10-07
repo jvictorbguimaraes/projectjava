@@ -89,6 +89,7 @@ public class Bank extends JFrame implements ActionListener
 	    b2.addActionListener(new ActionListener() {
 	      @Override
 	      public void actionPerformed(ActionEvent evt) {
+	    	  resetFields();
 	    	  newClient(); 
 	      }
 	    });
@@ -108,15 +109,18 @@ public class Bank extends JFrame implements ActionListener
 	    	  er3.setForeground (Color.red);
 	    	  s2.setForeground(Color.green);
 	    	  if(name1.getText().equals("")||contact1.getText().equals("")||email1.getText().equals("")||address1.getText().equals("")||password1.getText().equals("")||security.getText().equals(""))
-	    		  er3.setText("Error: All fields are mandatory!");
+	    		  er3.setText("Error: All fields are mandatory.");
 	    	  else if(checkFormat(email1.getText())==false)
-	    		  er3.setText("Error: Incorrect email format");
+	    		  er3.setText("Error: Incorrect email format.");
+	    	  else if(checkNumber(contact1.getText()))
+	    		  er3.setText("Error: Phone number must not have characters.");
 	    	  else
 	    	  {
 	    		  er3.setText("");
 	    		  s2.setText("Customer account created successfully!");
-		    	  Client newClient = new Client((int)Math.random(), name1.getText(),email1.getText(),address1.getText(),password1.getText(), false);
+		    	  Client newClient = new Client(10, name1.getText(),email1.getText(),contact1.getText(),address1.getText(),password1.getText(),cb1.getSelectedItem().toString(),security.getText(), false);
 		    	  newClient.createNewClient(xml, newClient);
+		    	  
 	    	  }
 	      }
 	    });
@@ -495,7 +499,6 @@ public class Bank extends JFrame implements ActionListener
         p1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         sp1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         l1.setHorizontalAlignment(SwingConstants.CENTER);
-        //l2.setHorizontalAlignment(SwingConstants.CENTER);
         login.setHorizontalAlignment(SwingConstants.CENTER);
         pass.setHorizontalAlignment(SwingConstants.CENTER);
         b1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -542,6 +545,7 @@ public class Bank extends JFrame implements ActionListener
         setLayout(new BorderLayout());
         add(p2,BorderLayout.CENTER);
         p2.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+        l6.setHorizontalAlignment(SwingConstants.CENTER);
         p2.add(l6);
 		p2.add(b2);
 		p2.add(search);
@@ -573,8 +577,8 @@ public class Bank extends JFrame implements ActionListener
 		p3.add(address1);
 		p3.add(f7);
 		p3.add(password1);
-		p3.add(f18);
-		p3.add(cb25);
+		//p3.add(f18);
+		//p3.add(cb25);
 		p3.add(f19);
 		p3.add(cb1);
 		p3.add(f8);
@@ -767,6 +771,19 @@ public class Bank extends JFrame implements ActionListener
 	{
 		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		return email.matches(regex);
+	}
+	public boolean checkNumber(String num)
+	{
+		if (num == null || num.length() == 0) {
+            return true;
+        }
+
+        for (char c : num.toCharArray()) {
+            if (!Character.isDigit(c)) {
+            	return true;
+            }
+        }
+        return false;
 	}
 
 }//class ends

@@ -11,7 +11,9 @@ public class Client
 	private String email;
 	private String address;
 	private String password;
-	private int phone;
+	private String securityQ;
+	private String securityA;
+	private String phone;
 	private boolean admin;
 	private Account saving;
 	private Account chequing;
@@ -23,14 +25,17 @@ public class Client
 		
 	}
 		
-	public Client(int id, String name,  String email, String address, String password, boolean admin) 
+	public Client(int id, String name,  String email, String phone, String address, String password, String securityQ, String securityA, boolean admin) 
 	{
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
+		this.phone = phone;
 		this.address = address;
 		this.password = password;
+		this.securityQ = securityQ;
+		this.securityA = securityA;
 		this.admin = admin;
 	}
 
@@ -60,11 +65,11 @@ public class Client
 		this.name = name;
 	}
 	
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -93,7 +98,22 @@ public class Client
 	{
 		this.password = password;
 	}	
-	
+	public String getSecurityQ() 
+	{
+		return securityQ;
+	}
+	public void setSecurityQ(String securityQ) 
+	{
+		this.securityQ = securityQ;
+	}
+	public String getSecurityA() 
+	{
+		return securityA;
+	}
+	public void setSecurityA(String securityA) 
+	{
+		this.securityA = securityA;
+	}
 
 	public boolean isAdmin() {
 		return admin;
@@ -229,7 +249,10 @@ public class Client
 			xml.createChildElement(element, "Email", client.email);
 			xml.createChildElement(element, "Address", client.address);
 			xml.createChildElement(element, "Password", client.password);
-			xml.createChildElement(element, "Phone", String.valueOf(client.phone));
+			//xml.createChildElement(element, "Phone", String.valueOf(client.phone));
+			xml.createChildElement(element, "Phone", client.phone);
+			xml.createChildElement(element, "SecurityQuestion", client.securityQ);
+			xml.createChildElement(element, "SecurityAnswer", client.securityA);
 			xml.createChildElement(element, "Admin", "False");
 			
 			Element saving = xml.createNewParentElement(element,"Saving");
@@ -272,7 +295,10 @@ public class Client
 						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
 						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
 						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
-						cli.phone = xml.getIntValue(elem, "Phone");
+						cli.phone = elem.getElementsByTagName("Phone").item(0).getTextContent();
+						//cli.phone = xml.getIntValue(elem, "Phone");
+						cli.securityQ = elem.getElementsByTagName("SecurityQuestion").item(0).getTextContent();
+						cli.securityA = elem.getElementsByTagName("SecurityAnswer").item(0).getTextContent();
 						cli.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
 						
 						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){					
