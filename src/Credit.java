@@ -43,7 +43,7 @@ public class Credit extends Account
 		try {
 			if(amount <= this.credLimit - super.accountBal){
 				super.accountBal += amount + minCharge;	
-				NodeList cred = cli.getNodeElement().getElementsByTagName("Savings");
+				NodeList cred = cli.getNodeElement().getElementsByTagName("Credit");
 				Element credElem = (Element) cred.item(0);
 				xml.changeNodeValue(credElem, "Balance", String.valueOf(super.accountBal));
 				if(addTransaction){
