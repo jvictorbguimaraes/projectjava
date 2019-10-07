@@ -11,7 +11,7 @@ public class Bank extends JFrame implements ActionListener
 	
 	//private variables
 	JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17,p18;
-	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8, withdraw, deposit, cl1, search, logout1,logout2,pay;
+	JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, cl1, search, logout1,logout2,pay;
 	JLabel l1;
 	
 	XmlUtils xml = new XmlUtils();
@@ -49,9 +49,6 @@ public class Bank extends JFrame implements ActionListener
 	    b1.addActionListener(new ActionListener() {
 	      @Override
 	      public void actionPerformed(ActionEvent evt) { 
-	    	
-	    	 
-	    	//System.out.println(login.getText()+" "+pass.getText());
 	    	client= new Client();
 	    	
 	    	if(client.validateLogin(xml, login.getText(), pass.getText()))
@@ -65,13 +62,6 @@ public class Bank extends JFrame implements ActionListener
 	    	else
 	    		System.out.println("Error");
 	    		//display error message
-	      }
-	    });
-	    
-	    cl1.addActionListener(new ActionListener() {
-	      @Override
-	      public void actionPerformed(ActionEvent evt) {
-	    	  clientView();
 	      }
 	    });
 	      
@@ -143,8 +133,14 @@ public class Bank extends JFrame implements ActionListener
 	    
 	    withdraw.addActionListener(new ActionListener() {
 		       @Override
-		       public void actionPerformed(ActionEvent evt){	        	 
-		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		       public void actionPerformed(ActionEvent evt){
+		    	   String item=(String)cb21.getSelectedItem();
+		    	   if(item.equalsIgnoreCase("Savings"))
+		    		   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		    	   else if(item.equalsIgnoreCase("Chequing"))
+		    		   client.getChequing().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		    	   else
+		    		   System.out.println("Error");
 		    
 			    }
 			});
@@ -244,6 +240,12 @@ public class Bank extends JFrame implements ActionListener
 			   clientView();  
 		   }
 	    });
+	    back9.addActionListener(new ActionListener() {
+			   @Override
+			   public void actionPerformed(ActionEvent evt) {
+				   adminView();  
+			   }
+		    });
 	      
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 	    setTitle("Banking System"); 
@@ -334,6 +336,7 @@ public class Bank extends JFrame implements ActionListener
 		back6= new JButton("Back");
 		back7= new JButton("Back");
 		back8= new JButton("Back");
+		back9= new JButton("Back");
 		withdraw = new JButton("Withdraw");
 		deposit = new JButton("Deposit");
 		pay = new JButton("Pay Bill");
@@ -392,7 +395,6 @@ public class Bank extends JFrame implements ActionListener
 		p1.add(login);
 		p1.add(pass);
 		p1.add(b1);
-		p1.add(cl1);
 		revalidate();
    	 	repaint();
 	}
@@ -441,6 +443,7 @@ public class Bank extends JFrame implements ActionListener
 		p3.add(cb1);
 		p3.add(security);
 		p3.add(b3);
+		p3.add(back9);
    	 	revalidate();
    	 	repaint();
 	}
