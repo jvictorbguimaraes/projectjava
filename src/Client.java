@@ -244,29 +244,28 @@ public class Client
 	{
 		try {
 			Element element = xml.createNewElement("Bank","Client");
-			xml.createChildElement(element, "Id", String.valueOf(Math.round(Math.random()*100)));
+			xml.createChildElement(element, "Id", xml.getNextId("ClientId"));
 			xml.createChildElement(element, "Name", client.name);
 			xml.createChildElement(element, "Email", client.email);
 			xml.createChildElement(element, "Address", client.address);
 			xml.createChildElement(element, "Password", client.password);
-			//xml.createChildElement(element, "Phone", String.valueOf(client.phone));
 			xml.createChildElement(element, "Phone", client.phone);
 			xml.createChildElement(element, "SecurityQuestion", client.securityQ);
 			xml.createChildElement(element, "SecurityAnswer", client.securityA);
 			xml.createChildElement(element, "Admin", "False");
 			
 			Element saving = xml.createNewParentElement(element,"Saving");
-			xml.createChildElement(saving, "Number", String.valueOf(Math.round(Math.random()*100)));
+			xml.createChildElement(saving, "Number", xml.getNextId("accountId"));
 			xml.createChildElement(saving, "Balance", "0");
 			xml.createNewParentElement(saving,"Transactions");
 			
 			Element chequing = xml.createNewParentElement(element,"Chequing");
-			xml.createChildElement(chequing, "Number", String.valueOf(Math.round(Math.random()*100)));
+			xml.createChildElement(chequing, "Number", xml.getNextId("accountId"));
 			xml.createChildElement(chequing, "Balance", "0");
 			xml.createNewParentElement(chequing,"Transactions");
 			
 			Element credit = xml.createNewParentElement(element,"Credit");
-			xml.createChildElement(credit, "Number", String.valueOf(Math.round(Math.random()*100)));
+			xml.createChildElement(credit, "Number", xml.getNextId("accountId"));
 			xml.createChildElement(credit, "Balance", "0");
 			xml.createChildElement(credit, "CredScore", "0");
 			xml.createChildElement(credit, "CredLimit", "500");
@@ -295,13 +294,13 @@ public class Client
 						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
 						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
 						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
-						cli.phone = elem.getElementsByTagName("Phone").item(0).getTextContent();
-						//cli.phone = xml.getIntValue(elem, "Phone");
-						cli.securityQ = elem.getElementsByTagName("SecurityQuestion").item(0).getTextContent();
-						cli.securityA = elem.getElementsByTagName("SecurityAnswer").item(0).getTextContent();
+						cli.phone = elem.getElementsByTagName("Phone").item(0).getTextContent();						
 						cli.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
 						
-						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){					
+						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){
+							cli.securityQ = elem.getElementsByTagName("SecurityQuestion").item(0).getTextContent();
+							cli.securityA = elem.getElementsByTagName("SecurityAnswer").item(0).getTextContent();
+							
 							NodeList saving = elem.getElementsByTagName("Saving");
 							Element savingElem = (Element) saving.item(0);
 							
@@ -317,6 +316,14 @@ public class Client
 							cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
 							cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
 							cli.chequing.getTransactions(xml, cheqElem);
+							
+							NodeList credit = elem.getElementsByTagName("Credit");
+							Element creditElem = (Element) credit.item(0);
+							
+							cli.credit = new Credit();
+							cli.credit.setAccountNum(xml.getIntValue(creditElem, "Number"));
+							cli.credit.setAccountBal(xml.getDoubleValue(creditElem, "Balance"));
+							cli.credit.getTransactions(xml, creditElem);
 						}
 						break;
 					}

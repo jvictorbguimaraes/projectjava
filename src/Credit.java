@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -43,7 +40,7 @@ public class Credit extends Account
 		try {
 			if(amount <= this.credLimit - super.accountBal){
 				super.accountBal += amount + minCharge;	
-				NodeList cred = cli.getNodeElement().getElementsByTagName("Savings");
+				NodeList cred = cli.getNodeElement().getElementsByTagName("Credit");
 				Element credElem = (Element) cred.item(0);
 				xml.changeNodeValue(credElem, "Balance", String.valueOf(super.accountBal));
 				if(addTransaction){

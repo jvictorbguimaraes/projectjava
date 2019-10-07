@@ -103,4 +103,11 @@ public class XmlUtils
 	public void removeElement(Element element){
 		element.getParentNode().removeChild(element);
 	}
+	
+	public String getNextId(String name){
+		Element element = (Element) doc.getElementsByTagName("Bank").item(0);
+		String nextId = String.valueOf(Integer.parseInt(element.getAttribute(name)) + 1);
+		element.setAttribute(name, nextId);
+		return nextId;
+	}
 }
