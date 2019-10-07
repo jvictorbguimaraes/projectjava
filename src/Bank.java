@@ -144,7 +144,7 @@ public class Bank extends JFrame implements ActionListener
 	    withdraw.addActionListener(new ActionListener() {
 		       @Override
 		       public void actionPerformed(ActionEvent evt){	        	 
-		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()), false);
 		    
 			    }
 			});

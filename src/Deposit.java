@@ -5,6 +5,10 @@ import org.w3c.dom.NodeList;
 
 public class Deposit extends Transaction{
 
+	public Deposit() {
+		super();
+	}
+	
 	public Deposit(int id, Date transDate, double amount) {
 		super(id, transDate, amount);
 		// TODO Auto-generated constructor stub

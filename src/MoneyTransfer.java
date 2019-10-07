@@ -8,6 +8,10 @@ public class MoneyTransfer extends Transaction {
 	private String RAcountNo;
 	private String SecurityQ;
 	
+	
+	public MoneyTransfer() {
+	}
+
 
 	public MoneyTransfer(int iD, Date transDate, double amount, String rAcountNo,
 			String securityQ) {
