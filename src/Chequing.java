@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.w3c.dom.Element;
@@ -16,7 +17,7 @@ public class Chequing extends Account
 	}
 
 	@Override
-	public boolean withdraw(Client cli, XmlUtils xml, double amount) {		
+	public boolean withdraw(Client cli, XmlUtils xml, double amount, boolean addTransaction) {		
 		try {
 			if(amount <= super.accountBal){
 				super.accountBal -= amount;				
@@ -29,6 +30,10 @@ public class Chequing extends Account
 			NodeList chequing = cli.getNodeElement().getElementsByTagName("Chequing");
 			Element cheqElem = (Element) chequing.item(0);
 			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(super.accountBal));
+			if(addTransaction){
+				Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
+				trans.addTransaction(cli, xml, cheqElem);
+			}
 			xml.updateXml();
 			return true;
 		} catch (Exception e) {
@@ -51,5 +56,11 @@ public class Chequing extends Account
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
+	}
+
+	@Override
+	public ArrayList<Transaction> getTransactions(XmlUtils xml, Element element) {
+		return null;
+		
 	}	
 }

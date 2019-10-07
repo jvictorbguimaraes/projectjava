@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.w3c.dom.Element;
@@ -38,13 +39,17 @@ public class Credit extends Account
 	}
 
 	@Override
-	public boolean withdraw(Client cli, XmlUtils xml, double amount) {		
+	public boolean withdraw(Client cli, XmlUtils xml, double amount, boolean addTransaction) {		
 		try {
 			if(amount <= this.credLimit - super.accountBal){
 				super.accountBal += amount + minCharge;	
-				NodeList saving = cli.getNodeElement().getElementsByTagName("Savings");
-				Element savElem = (Element) saving.item(0);
-				xml.changeNodeValue(savElem, "Balance", String.valueOf(super.accountBal));
+				NodeList cred = cli.getNodeElement().getElementsByTagName("Savings");
+				Element credElem = (Element) cred.item(0);
+				xml.changeNodeValue(credElem, "Balance", String.valueOf(super.accountBal));
+				if(addTransaction){
+					Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
+					trans.addTransaction(cli, xml, credElem);
+				}
 				xml.updateXml();
 				return true;
 			}						
@@ -57,5 +62,11 @@ public class Credit extends Account
 	@Override
 	public void deposit(Client cli, XmlUtils xml, double amount) {
 				
+	}
+
+	@Override
+	public ArrayList<Transaction> getTransactions(XmlUtils xml, Element element) {
+		return null;
+		
 	}
 }

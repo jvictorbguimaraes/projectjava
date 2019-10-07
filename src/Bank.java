@@ -174,10 +174,13 @@ public class Bank extends JFrame implements ActionListener
 	    withdraw.addActionListener(new ActionListener() {
 		       @Override
 		       public void actionPerformed(ActionEvent evt){	        	 
-		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()));
+		    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()),true);
 		    	   //check validation if no money then set error text
 		    	   s1.setForeground (Color.green);
 		    	   s1.setText("Withdraw Successful!");
+
+		    	   //client.getSaving().withdraw(client, xml, Double.parseDouble(amount1.getText()), false);
+
 		    
 			    }
 			});
@@ -185,7 +188,7 @@ public class Bank extends JFrame implements ActionListener
 	    deposit.addActionListener(new ActionListener() {
 			       @Override
 			       public void actionPerformed(ActionEvent evt){	        	 
-			    	   client.getSaving().withdraw(client, xml, Double.parseDouble(amount2.getText()));
+			    	   client.getSaving().deposit(client, xml, Double.parseDouble(amount2.getText()));
 			    	   //check validation if no money then set error text
 			    	   s4.setForeground (Color.green);
 			    	   s4.setText("Deposit Successful!");

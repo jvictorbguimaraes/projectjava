@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -9,6 +11,7 @@ public class Client
 	private String email;
 	private String address;
 	private String password;
+	private int phone;
 	private boolean admin;
 	private Account saving;
 	private Account chequing;
@@ -56,8 +59,15 @@ public class Client
 	{
 		this.name = name;
 	}
-		
 	
+	public int getPhone() {
+		return phone;
+	}
+
+	public void setPhone(int phone) {
+		this.phone = phone;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -151,6 +161,64 @@ public class Client
 			e.printStackTrace();
 		}
 	}
+	
+	public ArrayList<Client> searchClients(XmlUtils xml, String name, String address, String email){
+	
+		ArrayList<Client> clients = new ArrayList<Client>();
+		boolean found;
+		try{
+			NodeList list = xml.getElementsByTagName("Client");						
+			for(int i=0; i< list.getLength(); i++){
+				found = false;
+				Node node = list.item(i);			
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					Element elem = (Element) node;
+					if(email != null){
+						if(elem.getElementsByTagName("Email").item(0).getTextContent().equalsIgnoreCase(email))
+							found = true;
+						else
+							found = false;
+					}
+					if(name != null){
+						if(elem.getElementsByTagName("Name").item(0).getTextContent().equalsIgnoreCase(name))
+							found = true;
+						else
+							found = false;
+					}
+					if(address != null){
+						if(elem.getElementsByTagName("Address").item(0).getTextContent().equalsIgnoreCase(address))
+							found = true;
+						else
+							found = false;
+					}
+					if(found)
+						clients.add(getClientInfo(xml, elem.getElementsByTagName("Email").item(0).getTextContent()));
+				}
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return clients;
+	}
+	
+	public ArrayList<Client> getClients(XmlUtils xml)
+	{
+		ArrayList<Client> clients = new ArrayList<Client>();
+		try{
+			NodeList list = xml.getElementsByTagName("Client");		
+			
+			for(int i=0; i< list.getLength(); i++){
+				Node node = list.item(i);			
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					Element elem = (Element) node;
+					clients.add(getClientInfo(xml, elem.getElementsByTagName("Email").item(0).getTextContent()));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return clients;
+	}
 
 	public void createNewClient(XmlUtils xml, Client client)
 	{
@@ -161,6 +229,7 @@ public class Client
 			xml.createChildElement(element, "Email", client.email);
 			xml.createChildElement(element, "Address", client.address);
 			xml.createChildElement(element, "Password", client.password);
+			xml.createChildElement(element, "Phone", String.valueOf(client.phone));
 			xml.createChildElement(element, "Admin", "False");
 			
 			Element saving = xml.createNewParentElement(element,"Saving");
@@ -203,6 +272,7 @@ public class Client
 						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
 						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
 						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
+						cli.phone = xml.getIntValue(elem, "Phone");
 						cli.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
 						
 						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){					
@@ -219,6 +289,7 @@ public class Client
 							cli.chequing = new Chequing();
 							cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
 							cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
+							//cli.chequing.getTransactions(xml, cheqElem);
 						}
 						break;
 					}

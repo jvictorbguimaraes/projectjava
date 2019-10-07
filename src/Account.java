@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import org.w3c.dom.Element;
+
 public abstract class Account
 
 {
@@ -65,33 +67,39 @@ public abstract class Account
 		this.transactions = transactions;
 	}
 	
-	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount);
+	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount, boolean addTransaction);
 	
 	public abstract void deposit(Client cli, XmlUtils xml, double amount);
 	
-	public boolean payBill(Client cli, XmlUtils xml, int billId) {
+	public abstract ArrayList<Transaction> getTransactions(XmlUtils xml, Element element);
+	
+	public String payBill(Client cli, XmlUtils xml, int billId) {
 		try {			
 			BillPayment bill = new BillPayment();
 			bill = bill.getBill(xml, billId);
 			
-			if(!bill.isPaid() && withdraw(cli, xml, bill.getAmount())){	
+			if(bill.isPaid()){
+				return "Bill was already paid";
+			}else if(withdraw(cli, xml, bill.getAmount(), false)){
 				bill.setBillPayment(xml);
-				return true;
-			}			
+				return "Success";
+			}else{
+				return "Account doesn't have enough money";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
-		return false;
+		return null;
 	}	
 	
-	public boolean transferMoney(XmlUtils xml, Client cli, int accountNo, double amount){
+	public String transferMoney(XmlUtils xml, Client cli, int accountNo, double amount){
 		if(this.accountBal < amount)
-			return false;
+			return "Account doesn't have enough money";
 		
 		
 		
 		
-		return true;
+		return "Success";
 		
 		
 	}

@@ -5,6 +5,10 @@ import org.w3c.dom.NodeList;
 
 public class Withdraw extends Transaction {
 
+	public Withdraw() {
+		super();
+	}
+	
 	public Withdraw(int iD, Date transDate, double amount) {
 		super(iD, transDate, amount);
 		// TODO Auto-generated constructor stub
