@@ -33,8 +33,8 @@ public class Chequing extends Account
 			if(addTransaction){
 				Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
 				trans.addTransaction(cli, xml, cheqElem);
-			}
-			xml.updateXml();
+				xml.updateXml();
+			}			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,16 +43,17 @@ public class Chequing extends Account
 	}
 
 	@Override
-	public void deposit(Client cli, XmlUtils xml, double amount) {
+	public void deposit(Client cli, XmlUtils xml, double amount, boolean transfer) {
 		try {
 			this.accountBal += amount;
 			NodeList chequing = cli.getNodeElement().getElementsByTagName("Chequing");
 			Element cheqElem = (Element) chequing.item(0);
-			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));		
-			Transaction trans = new Deposit((int)Math.random(), new Date(), amount);
-			trans.addTransaction(cli, xml, cheqElem);
-			xml.updateXml();
-			
+			xml.changeNodeValue(cheqElem, "Balance", String.valueOf(this.accountBal));	
+			if(transfer){
+				Transaction trans = new Deposit((int)Math.random(), new Date(), amount);
+				trans.addTransaction(cli, xml, cheqElem);
+				xml.updateXml();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		

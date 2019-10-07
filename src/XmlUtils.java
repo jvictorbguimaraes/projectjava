@@ -99,4 +99,8 @@ public class XmlUtils
 		}
 		return Double.parseDouble(element.getElementsByTagName(tagName).item(0).getTextContent());
 	}
+	
+	public void removeElement(Element element){
+		element.getParentNode().removeChild(element);
+	}
 }

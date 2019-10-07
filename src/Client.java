@@ -192,7 +192,7 @@ public class Client
 							found = false;
 					}
 					if(found)
-						clients.add(getClientInfo(xml, elem.getElementsByTagName("Email").item(0).getTextContent()));
+						clients.add(getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent()));
 				}
 			}			
 		} catch (Exception e) {
@@ -211,7 +211,7 @@ public class Client
 				Node node = list.item(i);			
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
-					clients.add(getClientInfo(xml, elem.getElementsByTagName("Email").item(0).getTextContent()));
+					clients.add(getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent()));
 				}
 			}
 		} catch (Exception e) {
@@ -256,7 +256,7 @@ public class Client
 		}
 	}
 	
-	public Client getClientInfo(XmlUtils xml, String email)
+	public Client getClientInfo(XmlUtils xml, String name, String value)
 	{
 		Client cli = new Client();
 		try{
@@ -267,7 +267,7 @@ public class Client
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
 					cli.nodeElement = elem;
-					if(elem.getElementsByTagName("Email").item(0).getTextContent().equalsIgnoreCase(email)){
+					if(elem.getElementsByTagName(name).item(0).getTextContent().equalsIgnoreCase(value)){
 						cli.id = xml.getIntValue(elem,"Id");
 						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
 						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
@@ -299,5 +299,10 @@ public class Client
 			e.printStackTrace();
 		}
 		return cli;	
+	}
+	
+	public void removeClient(XmlUtils xml){
+		xml.removeElement(this.getNodeElement());
+		xml.updateXml();
 	}
 }

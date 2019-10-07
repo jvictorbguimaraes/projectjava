@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public abstract class Account
 
@@ -67,9 +70,9 @@ public abstract class Account
 		this.transactions = transactions;
 	}
 	
-	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount, boolean addTransaction);
+	public abstract boolean withdraw(Client cli, XmlUtils xml, double amount, boolean transfer);
 	
-	public abstract void deposit(Client cli, XmlUtils xml, double amount);
+	public abstract void deposit(Client cli, XmlUtils xml, double amount, boolean transfer);
 	
 	public abstract ArrayList<Transaction> getTransactions(XmlUtils xml, Element element);
 	
@@ -92,15 +95,41 @@ public abstract class Account
 		return null;
 	}	
 	
-	public String transferMoney(XmlUtils xml, Client cli, int accountNo, double amount){
-		if(this.accountBal < amount)
+	public String transferMoney(XmlUtils xml, Client client, int accountNo, String type, double amount){
+		
+		Client sentClient = new Client();	
+		
+		if(accountBal < amount)
 			return "Account doesn't have enough money";
 		
+		NodeList list = xml.getElementsByTagName(type);						
+		for(int i=0; i< list.getLength(); i++){
+			Node node = list.item(i);			
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				Element elem = (Element) node;
+				if(elem.getElementsByTagName("Number").item(0).getTextContent().equalsIgnoreCase(String.valueOf(accountNo))){
+					sentClient = sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
+					
+					if(type == "Chequing"){
+						sentClient.getChequing().deposit(sentClient, xml, amount, false);
+					}else{
+						sentClient.getSaving().deposit(sentClient, xml, amount, false);
+					}
+					
+					withdraw(client,xml,amount,false);
+					
+					Transaction trans = new MoneyTransfer((int)Math.random(), new Date(), amount * -1, accountNo);
+					trans.addTransaction(client, xml, client.getNodeElement());
+					
+					trans = new MoneyTransfer((int)Math.random(), new Date(), amount, this.accountNum);
+					trans.addTransaction(sentClient, xml, elem);
+					
+					xml.updateXml();
+					return "Success";
+				}
+			}
+		}
 		
-		
-		
-		return "Success";
-		
-		
+		return "Account not found";
 	}
 }
