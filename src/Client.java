@@ -244,7 +244,7 @@ public class Client
 	{
 		try {
 			Element element = xml.createNewElement("Bank","Client");
-			xml.createChildElement(element, "Id", xml.getNextId("ClientId"));
+			xml.createChildElement(element, "Id", xml.getNextId("clientId"));
 			xml.createChildElement(element, "Name", client.name);
 			xml.createChildElement(element, "Email", client.email);
 			xml.createChildElement(element, "Address", client.address);

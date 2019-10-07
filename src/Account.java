@@ -89,22 +89,18 @@ public abstract class Account
 				Element child = (Element) nChild;
 				if(nChild.getNodeName().equalsIgnoreCase("Deposit")){
 					trans = new Deposit();
-					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
 					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
 					transList.add(trans);					
 				}else if(nChild.getNodeName().equalsIgnoreCase("Withdraw")){
 					trans = new Withdraw();
-					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
 					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
 					transList.add(trans);
 				}else if(nChild.getNodeName().equalsIgnoreCase("BillPayment")){
 					trans = new BillPayment();
-					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
 					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
 					transList.add(trans);
 				}else{
 					trans = new MoneyTransfer();
-					trans.setID(Integer.parseInt(child.getElementsByTagName("ID").item(0).getTextContent()));
 					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
 					transList.add(trans);
 				}
@@ -157,10 +153,10 @@ public abstract class Account
 					
 					withdraw(client,xml,amount,false);
 					
-					Transaction trans = new MoneyTransfer((int)Math.random(), amount * -1, accountNo);
-					trans.addTransaction(client, xml, client.getNodeElement());
+					Transaction trans = new MoneyTransfer(amount * -1, accountNo);
+					trans.addTransaction(client, xml, (Element)client.getNodeElement().getElementsByTagName(type).item(0));
 					
-					trans = new MoneyTransfer((int)Math.random(), amount, this.accountNum);
+					trans = new MoneyTransfer(amount, this.accountNum);
 					trans.addTransaction(sentClient, xml, elem);
 					
 					xml.updateXml();

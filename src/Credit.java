@@ -44,7 +44,7 @@ public class Credit extends Account
 				Element credElem = (Element) cred.item(0);
 				xml.changeNodeValue(credElem, "Balance", String.valueOf(super.accountBal));
 				if(addTransaction){
-					Transaction trans = new Withdraw((int)Math.random(), amount);
+					Transaction trans = new Withdraw(amount);
 					trans.addTransaction(cli, xml, credElem);
 					xml.updateXml();
 				}				
