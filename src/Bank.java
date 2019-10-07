@@ -71,7 +71,7 @@ public class Bank extends JFrame implements ActionListener
 	    	
 	    	if(client.validateLogin(xml, login.getText(), pass.getText()))
 	    	{
-	    		client = client.getClientInfo(xml,login.getText());
+	    		client = client.getClientInfo(xml,"Email", login.getText());
 	    		if(client.isAdmin())
 	    			adminView();
 	    		else
@@ -190,7 +190,7 @@ public class Bank extends JFrame implements ActionListener
 	    deposit.addActionListener(new ActionListener() {
 			       @Override
 			       public void actionPerformed(ActionEvent evt){	        	 
-			    	   client.getSaving().deposit(client, xml, Double.parseDouble(amount2.getText()));
+			    	   client.getSaving().deposit(client, xml, Double.parseDouble(amount2.getText()),true);
 			    	   //check validation if no money then set error text
 			    	   s4.setForeground (Color.green);
 			    	   s4.setText("Deposit Successful!");

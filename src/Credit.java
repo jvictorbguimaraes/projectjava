@@ -49,8 +49,8 @@ public class Credit extends Account
 				if(addTransaction){
 					Transaction trans = new Withdraw((int)Math.random(), new Date(), amount);
 					trans.addTransaction(cli, xml, credElem);
-				}
-				xml.updateXml();
+					xml.updateXml();
+				}				
 				return true;
 			}						
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class Credit extends Account
 	}
 
 	@Override
-	public void deposit(Client cli, XmlUtils xml, double amount) {
+	public void deposit(Client cli, XmlUtils xml, double amount, boolean addTransaction) {
 				
 	}
 

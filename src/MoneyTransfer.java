@@ -5,44 +5,25 @@ import org.w3c.dom.NodeList;
 
 public class MoneyTransfer extends Transaction {
 
-	private String RAcountNo;
-	private String SecurityQ;
+	private int RAcountNo;
 	
 	
 	public MoneyTransfer() {
 	}
 
 
-	public MoneyTransfer(int iD, Date transDate, double amount, String rAcountNo,
-			String securityQ) {
+	public MoneyTransfer(int iD, Date transDate, double amount, int rAcountNo) {
 		super(iD, transDate, amount);
 		RAcountNo = rAcountNo;
-		SecurityQ = securityQ;
 	}
 
-
-	@Override
-	public String toString() {
-		return "MoneyTransfer [RAcountNo=" + RAcountNo + ", SecurityQ=" + SecurityQ + "]";
-	}
-
-
-	public String getRAcountNo() {
+	public int getRAcountNo() {
 		return RAcountNo;
 	}
 
-	public void setRAcountNo(String rAcountNo) {
+	public void setRAcountNo(int rAcountNo) {
 		RAcountNo = rAcountNo;
 	}
-
-	public String getSecurityQ() {
-		return SecurityQ;
-	}
-
-	public void setSecurityQ(String securityQ) {
-		SecurityQ = securityQ;
-	}
-
 
 	@Override
 	public void addTransaction(Client cli, XmlUtils xml, Element element){
