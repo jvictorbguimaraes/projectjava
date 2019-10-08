@@ -1,5 +1,3 @@
-import java.util.Date;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -12,8 +10,8 @@ public class MoneyTransfer extends Transaction {
 	}
 
 
-	public MoneyTransfer(int id, double amount, int rAcountNo) {
-		super(id, amount);
+	public MoneyTransfer(double amount, int rAcountNo) {
+		super(amount);
 		RAcountNo = rAcountNo;
 	}
 
@@ -31,7 +29,6 @@ public class MoneyTransfer extends Transaction {
 			NodeList trans = element.getElementsByTagName("Transactions");
 			Element transElem = (Element) trans.item(0);
 			Element transfer = xml.createNewParentElement(transElem,"MoneyTransfer");
-			xml.createChildElement(transfer, "ID", String.valueOf(super.id));
 			xml.createChildElement(transfer, "Date", super.date);
 			xml.createChildElement(transfer, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {

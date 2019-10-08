@@ -7,8 +7,8 @@ public class Withdraw extends Transaction {
 		super();
 	}
 	
-	public Withdraw(int id, double amount) {
-		super(id, amount);
+	public Withdraw(double amount) {
+		super(amount);
 	}
 
 	@Override
@@ -17,7 +17,6 @@ public class Withdraw extends Transaction {
 			NodeList trans = element.getElementsByTagName("Transactions");
 			Element transElem = (Element) trans.item(0);
 			Element withdraw = xml.createNewParentElement(transElem,"Withdraw");
-			xml.createChildElement(withdraw, "ID", String.valueOf(super.id));
 			xml.createChildElement(withdraw, "Date", super.date);
 			xml.createChildElement(withdraw, "Amount", String.valueOf(super.amount));			
 		} catch (Exception e) {

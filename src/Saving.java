@@ -33,7 +33,7 @@ public class Saving extends Account
 			xml.changeNodeValue(savElem, "Balance", String.valueOf(super.accountBal));
 
 			if(addTransaction){
-				Transaction trans = new Withdraw((int)Math.random(), amount);
+				Transaction trans = new Withdraw(amount);
 				trans.addTransaction(cli, xml, savElem);		
 				xml.updateXml();
 			}
@@ -52,7 +52,7 @@ public class Saving extends Account
 			Element savingElem = (Element) saving.item(0);
 			xml.changeNodeValue(savingElem, "Balance", String.valueOf(this.accountBal));
 			if(transfer){
-				Transaction trans = new Deposit((int)Math.random(), amount);
+				Transaction trans = new Deposit(amount);
 				trans.addTransaction(cli, xml, savingElem);
 				xml.updateXml();
 			}
