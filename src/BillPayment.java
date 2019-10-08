@@ -29,7 +29,10 @@ public class BillPayment extends Transaction {
 	}
 	@Override
 	public String toString() {
-		return "BillPayment [BillType=" + BillType + ", BillNo=" + BillNo + "]";
+		if(Paid)
+			return "BillType: " + BillType + " BillNo:" + BillNo + " Payment: Paid";
+		else
+			return "BillType: " + BillType + " BillNo:" + BillNo + " Payment: Not Paid";
 	}
 	
 	public BillPayment(){
@@ -43,8 +46,7 @@ public class BillPayment extends Transaction {
 		BillNo = billNo;
 	}
 	
-	public BillPayment getBill(XmlUtils xml, int id){
-		BillPayment bill = new BillPayment();
+	public boolean getBill(XmlUtils xml, int id){
 		try{
 			NodeList list = xml.getElementsByTagName("Bill");		
 				
@@ -53,18 +55,18 @@ public class BillPayment extends Transaction {
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
 					if(elem.getElementsByTagName("ID").item(0).getTextContent().equalsIgnoreCase(String.valueOf(id))){
-						bill.BillNo = id;
-						bill.BillType = elem.getElementsByTagName("Type").item(0).getTextContent();
-						bill.setAmount(Double.parseDouble(elem.getElementsByTagName("Value").item(0).getTextContent()));
-						bill.setPaid(Boolean.parseBoolean(elem.getElementsByTagName("Paid").item(0).getTextContent()));
-						break;
+						this.BillNo = id;
+						this.BillType = elem.getElementsByTagName("Type").item(0).getTextContent();
+						this.setAmount(Double.parseDouble(elem.getElementsByTagName("Value").item(0).getTextContent()));
+						this.setPaid(Boolean.parseBoolean(elem.getElementsByTagName("Paid").item(0).getTextContent()));
+						return true;
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return bill;
+		return false;
 	}
 	
 	public void setBillPayment(XmlUtils xml){

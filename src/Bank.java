@@ -4,10 +4,7 @@ import org.w3c.dom.NodeList;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 public class Bank extends JFrame implements ActionListener
 {	
@@ -22,18 +19,20 @@ public class Bank extends JFrame implements ActionListener
 	private JLabel er1,er2,er3,er4,er5,er6;
 	private JLabel s1,s2,s3,s4,s5,s6;
 	private JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26;
-	private JLabel taccountType, billno1,bamount1,billno2,accountType,showB2;
-	JTextField bamount2;
+	private JLabel taccountType, billno1,bamount1,billno2,accountType,showB2,displayBill;
+	JTextField bamount2,billnum;
 	
 	private JButton taccount;
 	
-	   String data[][]={ {"Withdraw","10/04/2019","6700"},    
+	String data[][]={ {"Withdraw","10/04/2019","6700"},    
                {"Deposit","10/04/2019","780"},    
-               {"Withdraw","10/04/2019","70"}};    
-		String column[]={"TYPE","DATE","AMOUNT"};         
-		JTable jt=new JTable(data,column);    
-		
-		JScrollPane sp=new JScrollPane(jt);    
+               {"Withdraw","10/04/2019","70"}};  
+	String data2[][];
+	String column1[]={"TYPE","DATE","AMOUNT"};   
+
+	String column2[]={"TYPE","DATE","AMOUNT"};  
+	JTable jt=new JTable();
+	JScrollPane sp=new JScrollPane();
 	
 	
 	XmlUtils xml = new XmlUtils();
@@ -283,11 +282,29 @@ public class Bank extends JFrame implements ActionListener
 			    }
 			});
 	    
+	    showB.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt){	
+		    	   BillPayment bills= new BillPayment();
+		    	   //System.out.println(Integer.parseInt(billnum.getText()));
+		    	   if(bills.getBill(xml,Integer.parseInt(billnum.getText()))) 
+		    	   {
+		    		   billno2.setText(bills.toString());
+		    	   }
+		    	   else
+		    	   {
+		    		   billno2.setText("Bill Not Found");
+		    	   }
+			    }
+			});
+	    
 	    payB.addActionListener(new ActionListener() {
 		       @Override
 		       public void actionPerformed(ActionEvent evt){	
-		    	   
-		    	   //client.getSaving().payBill(client, xml, 12345);
+		    	  if(cb23.getSelectedItem().equals("Chequing"))
+		    		  bamount1.setText(client.getChequing().payBill(client, xml,Integer.parseInt(billnum.getText())));
+		    	  else
+		    		  bamount1.setText(client.getSaving().payBill(client, xml,Integer.parseInt(billnum.getText())));
 			    }
 			});
 	    
@@ -400,6 +417,14 @@ public class Bank extends JFrame implements ActionListener
                 securityA.setText("");
             }
         });
+	    
+	    taccount.addActionListener(new ActionListener() {
+		       @Override
+		       public void actionPerformed(ActionEvent evt) {
+		    	   
+		    	  initializeTable();
+		       }
+		    });
 	    	      
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 	    setTitle("Banking System"); 
@@ -422,6 +447,56 @@ public class Bank extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+	}
+	
+	public void initializeTable()
+	{
+		System.out.println();
+		int size = client.getSaving().getTransactions().size();
+		data2=new String[size][3];			
+        for(int i=0;i<size-1;i++)
+        {
+        	for(Transaction trans : client.getSaving().getTransactions())
+            {
+        		for(int j =0;j<3;j++)
+                {
+                         if(trans instanceof Deposit) 
+                         {
+                             data2[i][j]="Deposit" ;
+                         }
+                         else if(trans instanceof Withdraw)
+                         {
+                             data2[i][j]= "Withdraw";
+                         }
+                         else if(trans instanceof MoneyTransfer)
+                         {
+                             data2[i][j]= "Money Transfer";
+                         }
+                         else
+                         {
+                             data2[i][j]= "Bills";
+                         }
+                }
+            }
+          
+            
+//            else if(j==1)
+//                data2[i][j]=client.getSaving().getTransactions().get(i).getTransDate();
+//            else
+//                data2[i][j]=Double.toString(client.getSaving().getTransactions().get(i).getAmount());
+         
+                
+        }//i loop ends    
+            
+            for(int i=0;i<client.getChequing().getTransactions().size()-1;i++)
+            {
+                for(int j =0;j<3;j++)
+                {
+                    System.out.println("data2["+i+"]["+j+"]"+data2[i][j]);
+                    
+                }
+                System.out.println();
+            }
 	}
 	
 	public void initialize()
@@ -526,7 +601,7 @@ public class Bank extends JFrame implements ActionListener
 		modify = new JButton("Update");
 		delete= new JButton("Delete Client");		
 		taccount =new JButton("Display");
-		billno2 =new JLabel("Show Bill");
+		billno2 =new JLabel("");
 		accountType =new JLabel("Enter Account Type");
 		showB =new JButton("Show");
 		
@@ -579,6 +654,7 @@ public class Bank extends JFrame implements ActionListener
 		amount2 = new JTextField("");
 		amount3 = new JTextField("Enter Bill Number");
 		amt = new JTextField("");
+		billnum = new JTextField("");
 		recieverA = new JTextField("");
 		securityQ = new JTextField();//set Text from Client
 		securityA = new JTextField("Type Answer...");
@@ -796,16 +872,18 @@ public class Bank extends JFrame implements ActionListener
         p14.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         np6.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         np6.add(l9);
-        billno2.setText("");
+        billno2.setText("Test");
         p14.add(billno1);
+        p14.add(billnum);
         p14.add(showB);
         p14.add(billno2);
         p14.add(accountType);
         p14.add(cb23);
 		p14.add(bamount1);
-		p14.add(bamount2);
 		p14.add(payB);
 		p14.add(back4);
+		billno2.setText("");
+		bamount1.setText("");
    	 	revalidate();
    	 	repaint();
 	}

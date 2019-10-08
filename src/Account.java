@@ -112,13 +112,13 @@ public abstract class Account
 	public String payBill(Client cli, XmlUtils xml, int billId) {
 		try {			
 			BillPayment bill = new BillPayment();
-			bill = bill.getBill(xml, billId);
+			bill.getBill(xml, billId);
 			
 			if(bill.isPaid()){
 				return "Bill was already paid";
 			}else if(withdraw(cli, xml, bill.getAmount(), false)){
 				bill.setBillPayment(xml);
-				return "Success";
+				return "Bill Paid Successfully";
 			}else{
 				return "Account doesn't have enough money";
 			}
