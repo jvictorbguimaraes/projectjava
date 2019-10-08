@@ -211,8 +211,11 @@ public class Client
 						else
 							found = false;
 					}
-					if(found)
-						clients.add(getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent()));
+					if(found){
+						Client cli = new Client();
+						cli.getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent());
+						clients.add(cli);
+					}
 				}
 			}			
 		} catch (Exception e) {
@@ -224,6 +227,7 @@ public class Client
 	public ArrayList<Client> getClients(XmlUtils xml)
 	{
 		ArrayList<Client> clients = new ArrayList<Client>();
+		Client client;
 		try{
 			NodeList list = xml.getElementsByTagName("Client");		
 			
@@ -231,7 +235,9 @@ public class Client
 				Node node = list.item(i);			
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
-					clients.add(getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent()));
+					client = new Client();
+					client.getClientInfo(xml, "Email", elem.getElementsByTagName("Email").item(0).getTextContent());
+					clients.add(client);
 				}
 			}
 		} catch (Exception e) {
@@ -278,9 +284,8 @@ public class Client
 		}
 	}
 	
-	public Client getClientInfo(XmlUtils xml, String name, String value)
+	public boolean getClientInfo(XmlUtils xml, String name, String value)
 	{
-		Client cli = new Client();
 		try{
 			NodeList list = xml.getElementsByTagName("Client");		
 			
@@ -288,53 +293,53 @@ public class Client
 				Node node = list.item(i);			
 				if(node.getNodeType() == Node.ELEMENT_NODE){
 					Element elem = (Element) node;
-					cli.nodeElement = elem;
+					this.nodeElement = elem;
 					if(elem.getElementsByTagName(name).item(0).getTextContent().equalsIgnoreCase(value)){
-						cli.id = xml.getIntValue(elem,"Id");
-						cli.name = elem.getElementsByTagName("Name").item(0).getTextContent();
-						cli.email = elem.getElementsByTagName("Email").item(0).getTextContent();
-						cli.password = elem.getElementsByTagName("Password").item(0).getTextContent();
-						cli.phone = elem.getElementsByTagName("Phone").item(0).getTextContent();						
-						cli.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
+						this.id = xml.getIntValue(elem,"Id");
+						this.name = elem.getElementsByTagName("Name").item(0).getTextContent();
+						this.email = elem.getElementsByTagName("Email").item(0).getTextContent();
+						this.password = elem.getElementsByTagName("Password").item(0).getTextContent();
+						this.phone = elem.getElementsByTagName("Phone").item(0).getTextContent();						
+						this.admin = Boolean.parseBoolean(elem.getElementsByTagName("Admin").item(0).getTextContent());
 						
 						if(elem.getElementsByTagName("Admin").item(0).getTextContent().equalsIgnoreCase("False")){
-							cli.securityQ = elem.getElementsByTagName("SecurityQuestion").item(0).getTextContent();
-							cli.securityA = elem.getElementsByTagName("SecurityAnswer").item(0).getTextContent();
+							this.securityQ = elem.getElementsByTagName("SecurityQuestion").item(0).getTextContent();
+							this.securityA = elem.getElementsByTagName("SecurityAnswer").item(0).getTextContent();
 							
 							NodeList saving = elem.getElementsByTagName("Saving");
 							Element savingElem = (Element) saving.item(0);
 							
-							cli.saving = new Saving();
-							cli.saving.setAccountNum(xml.getIntValue(savingElem, "Number"));
-							cli.saving.setAccountBal(xml.getDoubleValue(savingElem, "Balance"));
-							cli.saving.getTransactions(xml, savingElem);
+							this.saving = new Saving();
+							this.saving.setAccountNum(xml.getIntValue(savingElem, "Number"));
+							this.saving.setAccountBal(xml.getDoubleValue(savingElem, "Balance"));
+							this.saving.getTransactions(xml, savingElem);
 							
 							NodeList chequing = elem.getElementsByTagName("Chequing");
 							Element cheqElem = (Element) chequing.item(0);
 							
-							cli.chequing = new Chequing();
-							cli.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
-							cli.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
-							cli.chequing.getTransactions(xml, cheqElem);
+							this.chequing = new Chequing();
+							this.chequing.setAccountNum(xml.getIntValue(cheqElem, "Number"));
+							this.chequing.setAccountBal(xml.getDoubleValue(cheqElem, "Balance"));
+							this.chequing.getTransactions(xml, cheqElem);
 							
 							NodeList credit = elem.getElementsByTagName("Credit");
 							Element creditElem = (Element) credit.item(0);
 							
-							cli.credit = new Credit();
-							cli.credit.setAccountNum(xml.getIntValue(creditElem, "Number"));
-							cli.credit.setAccountBal(xml.getDoubleValue(creditElem, "Balance"));
-							((Credit)cli.credit).setCredLimit(xml.getDoubleValue(creditElem, "CredLimit"));
-							((Credit)cli.credit).setCredScore(xml.getDoubleValue(creditElem, "CredScore"));
-							cli.credit.getTransactions(xml, creditElem);
+							this.credit = new Credit();
+							this.credit.setAccountNum(xml.getIntValue(creditElem, "Number"));
+							this.credit.setAccountBal(xml.getDoubleValue(creditElem, "Balance"));
+							((Credit)this.credit).setCredLimit(xml.getDoubleValue(creditElem, "CredLimit"));
+							((Credit)this.credit).setCredScore(xml.getDoubleValue(creditElem, "CredScore"));
+							this.credit.getTransactions(xml, creditElem);
 						}
-						break;
+						return true;
 					}
 				}
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return cli;	
+		return false;	
 	}
 	
 	public void removeClient(XmlUtils xml){

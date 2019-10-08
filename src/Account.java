@@ -149,7 +149,7 @@ public abstract class Account
 			if(node.getNodeType() == Node.ELEMENT_NODE){
 				Element elem = (Element) node;
 				if(elem.getElementsByTagName("Number").item(0).getTextContent().equalsIgnoreCase(String.valueOf(accountNo))){
-					sentClient = sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
+					sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
 					
 					if(type == "Chequing"){
 						sentClient.getChequing().deposit(sentClient, xml, amount, false);
