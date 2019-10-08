@@ -15,19 +15,22 @@ public class Bank extends JFrame implements ActionListener
 	
 	//private variables
 	private JPanel p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17,p18, cont,pan;
-	private JButton b1, b2, b3, b4, b5, b6, b7, b8, b9,reset,payB,checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, search, logout1,logout2,pay;
+	private JButton b1, b2, b3, b4, b5, b6, b7, b8, b9,reset,payB,showB,checkBal,update1,update2, search2, modify, delete, back1, back2, back3, back4, back5, back6, back7, back8,back9, withdraw, deposit, search, logout1,logout2,pay;
 	private JPanel np1,np2,np3,np4,np5,np6,np7,np8,np9,np10;
 	private JPanel sp1,sp2,sp3,sp4,sp5,sp6;
 	private JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11;
 	private JLabel er1,er2,er3,er4,er5,er6;
-	private JLabel s1,s2,s3,s4,s5;
+	private JLabel s1,s2,s3,s4,s5,s6;
 	private JLabel f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26;
+	private JLabel taccountType, billno1,bamount1,billno2,accountType,showB2;
+	JTextField bamount2;
 	
+	private JButton taccount;
 	
-	   String data[][]={ {"101","Amit","670000"},    
-               {"102","Jai","780000"},    
-               {"101","Sachin","700000"}};    
-		String column[]={"ID","NAME","SALARY"};         
+	   String data[][]={ {"Withdraw","10/04/2019","6700"},    
+               {"Deposit","10/04/2019","780"},    
+               {"Withdraw","10/04/2019","70"}};    
+		String column[]={"TYPE","DATE","AMOUNT"};         
 		JTable jt=new JTable(data,column);    
 		
 		JScrollPane sp=new JScrollPane(jt);    
@@ -49,7 +52,7 @@ public class Bank extends JFrame implements ActionListener
 	private final JComboBox<String> cb21 = new JComboBox<String>(accType11);
 	private String[] accType22 = { "Chequing","Savings"};
 	private final JComboBox<String> cb22 = new JComboBox<String>(accType22);
-	private String[] accType23 = { "Chequing","Savings","Credit"};
+	private String[] accType23 = { "Chequing","Savings"};
 	private final JComboBox<String> cb23 = new JComboBox<String>(accType23);
 	private String[] accType24 = { "Chequing","Savings","Credit"};
 	private final JComboBox<String> cb24 = new JComboBox<String>(accType24);
@@ -282,14 +285,22 @@ public class Bank extends JFrame implements ActionListener
 	    
 	    payB.addActionListener(new ActionListener() {
 		       @Override
-		       public void actionPerformed(ActionEvent evt){	        	 
-		    	   client.getSaving().payBill(client, xml, 12345);
+		       public void actionPerformed(ActionEvent evt){	
+		    	   
+		    	   //client.getSaving().payBill(client, xml, 12345);
 			    }
 			});
+	    
 	    checkBal.addActionListener(new ActionListener() {
 		       @Override
-		       public void actionPerformed(ActionEvent evt){	        	 
-		    	  System.out.println( client.getSaving().getAccountBal());
+		       public void actionPerformed(ActionEvent evt){	
+		    	   if(cb24.getSelectedItem().equals("Chequing"))
+		    		   s6.setText("Account Balance: "+client.getChequing().getAccountBal());
+		    	   else if(cb24.getSelectedItem().equals("Savings"))
+		    		   s6.setText("Account Balance: "+client.getSaving().getAccountBal());
+		    	   else
+		    		   s6.setText("Balance Payment: "+client.getCredit().getAccountBal());
+		    		   
 			    }
 			});
 	      
@@ -478,10 +489,13 @@ public class Bank extends JFrame implements ActionListener
 		f24 = new JLabel("Contact");
 		f25 = new JLabel("Email");
 		f26 = new JLabel("Address");
+		taccountType=new JLabel("Select Account Type");
+		billno1 =new JLabel("Enter Bill Number");
+		bamount1 = new JLabel("Enter Bill Amount");
 		
 		b1 = new JButton("Login");
 		b2 = new JButton("New Account");
-		search = new JButton("Search Client");
+		search = new JButton("Search or Update Client");
 		logout1 = new JButton("Logout");
 		logout2 = new JButton("Logout");
 		b3 = new JButton("Create");
@@ -511,6 +525,10 @@ public class Bank extends JFrame implements ActionListener
 		search2 = new JButton("Search");
 		modify = new JButton("Update");
 		delete= new JButton("Delete Client");		
+		taccount =new JButton("Display");
+		billno2 =new JLabel("Show Bill");
+		accountType =new JLabel("Enter Account Type");
+		showB =new JButton("Show");
 		
 		
 		l1 = new JLabel("TORONTO BANKING");
@@ -524,6 +542,7 @@ public class Bank extends JFrame implements ActionListener
 		l9 = new JLabel("Pay Your Bills");
 		l10 = new JLabel("Transfer Money");
 		l11= new JLabel("Check your Account Balance");
+		
 		er1 = new JLabel(" ");
 		er2 = new JLabel(" ");
 		er3 = new JLabel(" ");
@@ -535,8 +554,9 @@ public class Bank extends JFrame implements ActionListener
 		s3 = new JLabel(" ");
 		s4 = new JLabel(" ");
 		s5 = new JLabel(" ");
+		s6 = new JLabel(" ");
 		
-		
+		bamount2= new JTextField("");
 		login = new JTextField("");
 		pass = new JTextField("");
 		name1 = new JTextField("");
@@ -620,7 +640,7 @@ public class Bank extends JFrame implements ActionListener
 		p4.add(b7);
 		p4.add(b8);
 		p4.add(b9);
-		p4.add(update1);
+		//p4.add(update1);
 		p4.add(logout2);
 		add(p4);
    	 	revalidate();
@@ -776,11 +796,14 @@ public class Bank extends JFrame implements ActionListener
         p14.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         np6.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         np6.add(l9);
-		p14.add(cb23);
-		//add field for bill code
-		//add field for searching bill code
-		//p14.add(cb3);
-		p14.add(amount3);
+        billno2.setText("");
+        p14.add(billno1);
+        p14.add(showB);
+        p14.add(billno2);
+        p14.add(accountType);
+        p14.add(cb23);
+		p14.add(bamount1);
+		p14.add(bamount2);
 		p14.add(payB);
 		p14.add(back4);
    	 	revalidate();
@@ -829,6 +852,8 @@ public class Bank extends JFrame implements ActionListener
         p16.add(cb24);
         p16.add(checkBal);
         p16.add(back6);
+        p16.add(s6);
+        s6.setText(" ");
    	 	revalidate();
    	 	repaint();
 	}
@@ -840,7 +865,9 @@ public class Bank extends JFrame implements ActionListener
         setLayout(new BorderLayout());
         p17.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(p17,BorderLayout.CENTER);
-        //add account selection
+        p17.add(taccountType);
+        p17.add(cb25);
+        p17.add(taccount);
         p17.add(sp);
 		p17.add(back7);
    	 	revalidate();
