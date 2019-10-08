@@ -17,7 +17,7 @@ public class Client
 	private boolean admin;
 	private Account saving;
 	private Account chequing;
-	private Credit credit;
+	private Account credit;
 	private Element nodeElement;
 
 	public Client()
@@ -48,7 +48,7 @@ public class Client
 		this.id = id;
 	}
 	
-	public Credit getCredit() {
+	public Account getCredit() {
 		return credit;
 	}
 
@@ -323,8 +323,8 @@ public class Client
 							cli.credit = new Credit();
 							cli.credit.setAccountNum(xml.getIntValue(creditElem, "Number"));
 							cli.credit.setAccountBal(xml.getDoubleValue(creditElem, "Balance"));
-							cli.credit.setCredLimit(xml.getDoubleValue(creditElem, "CredLimit"));
-							cli.credit.setCredScore(xml.getDoubleValue(creditElem, "CredScore"));
+							((Credit)cli.credit).setCredLimit(xml.getDoubleValue(creditElem, "CredLimit"));
+							((Credit)cli.credit).setCredScore(xml.getDoubleValue(creditElem, "CredScore"));
 							cli.credit.getTransactions(xml, creditElem);
 						}
 						break;

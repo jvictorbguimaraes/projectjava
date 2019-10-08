@@ -89,19 +89,25 @@ public abstract class Account
 				Element child = (Element) nChild;
 				if(nChild.getNodeName().equalsIgnoreCase("Deposit")){
 					trans = new Deposit();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);					
 				}else if(nChild.getNodeName().equalsIgnoreCase("Withdraw")){
 					trans = new Withdraw();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);
 				}else if(nChild.getNodeName().equalsIgnoreCase("BillPayment")){
 					trans = new BillPayment();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);
 				}else{
 					trans = new MoneyTransfer();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					((MoneyTransfer)trans).setRAcountNo(xml.getIntValue(child, "Account"));
+					((MoneyTransfer)trans).setAccountName((child.getElementsByTagName("Name").item(0).getTextContent()));
+					trans.setTransDate(child.getElementsByTagName("Date").item(0).getTextContent());
 					transList.add(trans);
 				}
 			}
@@ -153,10 +159,10 @@ public abstract class Account
 					
 					withdraw(client,xml,amount,false);
 					
-					Transaction trans = new MoneyTransfer(amount * -1, accountNo);
+					Transaction trans = new MoneyTransfer(amount * -1, accountNo, elem.getElementsByTagName("Number").item(0).getTextContent());
 					trans.addTransaction(client, xml, (Element)client.getNodeElement().getElementsByTagName(type).item(0));
 					
-					trans = new MoneyTransfer(amount, this.accountNum);
+					trans = new MoneyTransfer(amount, this.accountNum, client.getName());
 					trans.addTransaction(sentClient, xml, elem);
 					
 					xml.updateXml();
