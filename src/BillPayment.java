@@ -30,9 +30,9 @@ public class BillPayment extends Transaction {
 	@Override
 	public String toString() {
 		if(Paid)
-			return "BillType: " + BillType + " BillNo:" + BillNo + " Payment: Paid";
+			return "Number: " + BillNo + " | Type: " + BillType +" | Payment: Paid";
 		else
-			return "BillType: " + BillType + " BillNo:" + BillNo + " Payment: Not Paid";
+			return "Number: " + BillNo + "| Type: " + BillType + " | Payment: Not Paid";
 	}
 	
 	public BillPayment(){
@@ -79,7 +79,6 @@ public class BillPayment extends Transaction {
 					Element elem = (Element) node;
 					if(elem.getElementsByTagName("ID").item(0).getTextContent().equalsIgnoreCase(String.valueOf(this.BillNo))){
 						xml.changeNodeValue(elem, "Paid", "True");
-						xml.updateXml();
 						break;
 					}
 				}

@@ -60,4 +60,10 @@ public class Credit extends Account
 	public void deposit(Client cli, XmlUtils xml, double amount, boolean addTransaction) {
 				
 	}
+
+	@Override
+	public String payBill(Client cli, XmlUtils xml, int billId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

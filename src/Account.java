@@ -75,6 +75,8 @@ public abstract class Account
 	
 	public abstract void deposit(Client cli, XmlUtils xml, double amount, boolean transfer);
 	
+	public abstract String payBill(Client cli, XmlUtils xml, int billId);
+	
 	public void getTransactions(XmlUtils xml, Element element){
 		ArrayList<Transaction> transList = new ArrayList<Transaction>();
 		NodeList list = element.getElementsByTagName("Transactions");		
@@ -85,48 +87,35 @@ public abstract class Account
 			Element elem = (Element) node;
 			list = elem.getChildNodes();
 			for(int i=0; i< list.getLength(); i++){	
-				Node nChild = list.item(0);
+				Node nChild = list.item(i);
 				Element child = (Element) nChild;
-				if(nChild.getNodeName().equalsIgnoreCase("Deposit")){
+				if(child.getNodeName().equalsIgnoreCase("Deposit")){
 					trans = new Deposit();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);					
-				}else if(nChild.getNodeName().equalsIgnoreCase("Withdraw")){
+				}else if(child.getNodeName().equalsIgnoreCase("Withdraw")){
 					trans = new Withdraw();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);
-				}else if(nChild.getNodeName().equalsIgnoreCase("BillPayment")){
+				}else if(child.getNodeName().equalsIgnoreCase("BillPayment")){
 					trans = new BillPayment();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					trans.setTransDate((child.getElementsByTagName("Date").item(0).getTextContent()));
 					transList.add(trans);
 				}else{
 					trans = new MoneyTransfer();
-					trans.setAmount(Double.parseDouble(child.getElementsByTagName("Amount").item(0).getTextContent()));
+					trans.setAmount(xml.getDoubleValue(child, "Amount"));
+					((MoneyTransfer)trans).setRAcountNo(xml.getIntValue(child, "Account"));
+					((MoneyTransfer)trans).setAccountName((child.getElementsByTagName("Name").item(0).getTextContent()));
+					trans.setTransDate(child.getElementsByTagName("Date").item(0).getTextContent());
 					transList.add(trans);
 				}
 			}
 		}
 		setTransactions(transList);
 	}
-	
-	public String payBill(Client cli, XmlUtils xml, int billId) {
-		try {			
-			BillPayment bill = new BillPayment();
-			bill.getBill(xml, billId);
-			
-			if(bill.isPaid()){
-				return "Bill was already paid";
-			}else if(withdraw(cli, xml, bill.getAmount(), false)){
-				bill.setBillPayment(xml);
-				return "Bill Paid Successfully";
-			}else{
-				return "Account doesn't have enough money";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-		return null;
-	}	
 	
 	public String transferMoney(XmlUtils xml, Client client, int accountNo, String type, double amount){
 		
@@ -135,36 +124,52 @@ public abstract class Account
 		if(accountBal < amount)
 			return "Account doesn't have enough money";
 		
-		type = "Chequing";
-		
-		NodeList list = xml.getElementsByTagName(type);						
+		Element elem = null;
+		NodeList list = xml.getElementsByTagName("Chequing");						
 		for(int i=0; i< list.getLength(); i++){
 			Node node = list.item(i);			
 			if(node.getNodeType() == Node.ELEMENT_NODE){
-				Element elem = (Element) node;
+				elem = (Element) node;
 				if(elem.getElementsByTagName("Number").item(0).getTextContent().equalsIgnoreCase(String.valueOf(accountNo))){
-					sentClient = sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
-					
-					if(type == "Chequing"){
-						sentClient.getChequing().deposit(sentClient, xml, amount, false);
-					}else{
+					sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
+					sentClient.getChequing().deposit(sentClient, xml, amount, false);
+					break;
+				}
+				elem = null;
+			}
+		}
+		
+		if(elem == null){
+			list = xml.getElementsByTagName("Saving");						
+			for(int i=0; i< list.getLength(); i++){
+				Node node = list.item(i);			
+				if(node.getNodeType() == Node.ELEMENT_NODE){
+					elem = (Element) node;
+					if(elem.getElementsByTagName("Number").item(0).getTextContent().equalsIgnoreCase(String.valueOf(accountNo))){
+						sentClient.getClientInfo(xml, "Id", ((Element)elem.getParentNode()).getElementsByTagName("Id").item(0).getTextContent());
 						sentClient.getSaving().deposit(sentClient, xml, amount, false);
+						break;
 					}
-					
-					withdraw(client,xml,amount,false);
-					
-					Transaction trans = new MoneyTransfer(amount * -1, accountNo);
-					trans.addTransaction(client, xml, (Element)client.getNodeElement().getElementsByTagName(type).item(0));
-					
-					trans = new MoneyTransfer(amount, this.accountNum);
-					trans.addTransaction(sentClient, xml, elem);
-					
-					xml.updateXml();
-					return "Success";
+					elem = null;
 				}
 			}
 		}
 		
-		return "Account not found";
+		if(elem == null){
+			return "Account not found";
+		}else{			
+			withdraw(client,xml,amount,false);
+			
+			Transaction trans = new MoneyTransfer(amount * -1, accountNo,sentClient.getName());
+			trans.addTransaction(client, xml, (Element)client.getNodeElement().getElementsByTagName(type).item(0));
+			
+			trans = new MoneyTransfer(amount, this.accountNum, client.getName());
+			trans.addTransaction(sentClient, xml, elem);
+			
+			xml.updateXml();
+			return "Money Transfered Successfully";
+		}
 	}
+
+	
 }

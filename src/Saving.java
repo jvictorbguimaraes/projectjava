@@ -61,4 +61,28 @@ public class Saving extends Account
 			e.printStackTrace();
 		}		
 	}
+	
+	public String payBill(Client cli, XmlUtils xml, int billId) {
+		try {			
+			BillPayment bill = new BillPayment();
+			bill.getBill(xml, billId);
+			
+			if(bill.isPaid()){
+				return "Bill was already paid";
+			}else if(withdraw(cli, xml, bill.getAmount(), false)){
+				bill.setBillPayment(xml);
+				
+				Element element =  (Element) cli.getNodeElement().getElementsByTagName("Saving").item(0);
+								
+				bill.addTransaction(cli, xml, element);
+				xml.updateXml();
+				return "Bill Paid Successfully";
+			}else{
+				return "Account doesn't have enough money";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		return null;
+	}	
 }
