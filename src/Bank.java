@@ -28,7 +28,7 @@ public class Bank extends JFrame implements ActionListener
 
 	private JButton taccount;
 	private String data2[][];
-	private String column1[]={"TYPE","DATE","AMOUNT"};    
+	private String column1[]={"TYPE","DATE","AMOUNT","ACCOUNT NAME"};    
 	private JTable jt=new JTable();
 	private JScrollPane sp=new JScrollPane();
 	private JScrollPane clientList =new JScrollPane();
@@ -37,6 +37,7 @@ public class Bank extends JFrame implements ActionListener
 	private XmlUtils xml = new XmlUtils();
 	private Client client;
 	private Client client2=new Client();
+	private String email = "";
 	private JList <String>clients;
 	private DefaultListModel<String> listModel; 
 	private ArrayList<Client> clientInfo;
@@ -82,6 +83,7 @@ public class Bank extends JFrame implements ActionListener
 				if(client.validateLogin(xml, login.getText(), pass.getText()))
 				{
 					client.getClientInfo(xml,"Email", login.getText());
+					email = login.getText();
 					if(client.isAdmin())
 						adminView();
 					else
@@ -203,6 +205,7 @@ public class Bank extends JFrame implements ActionListener
 					{
 						initializeTable();
 						s1.setText("Withdraw Successful from Savings Account!");
+						client.getClientInfo(xml,"Email", email);
 					}
 					else	
 						er2.setText("Error: No Balance in your Savings Account");
@@ -210,9 +213,10 @@ public class Bank extends JFrame implements ActionListener
 				}
 				else
 				{
-					if(client.getCredit().withdraw(client, xml, Double.parseDouble(amount1.getText()),true))
+					if(client.getCredit().withdraw(client, xml, Double.parseDouble(amount1.getText()),true)) {
 						s1.setText("Withdraw Successful from Credit Account!");
-					else	
+						client.getClientInfo(xml,"Email", email);
+					}else	
 						er2.setText("Error: Exceeded credit limit");
 				}
 
@@ -228,11 +232,13 @@ public class Bank extends JFrame implements ActionListener
 				if(cb22.getSelectedItem().equals("Chequing"))
 				{
 					client.getChequing().deposit(client, xml, Double.parseDouble(amount2.getText()),true); 
+					client.getClientInfo(xml,"Email", email);
 					s4.setText("Deposit Successful into Chequing Account!");
 				}
 				else if(cb22.getSelectedItem().equals("Savings"))
 				{
 					client.getSaving().deposit(client, xml, Double.parseDouble(amount2.getText()),true); 
+					client.getClientInfo(xml,"Email", email);
 					s4.setText("Deposit Successful into Savings Account!");
 				}
 			}
@@ -255,6 +261,7 @@ public class Bank extends JFrame implements ActionListener
 					{
 						msg=client.getChequing().transferMoney(xml, client, Integer.parseInt(recieverA.getText()), "Chequing", Double.parseDouble(amt.getText()));
 					}
+					client.getClientInfo(xml,"Email", email);
 				}
 				else
 					er6.setText("Error: Security check failed");
@@ -285,6 +292,7 @@ public class Bank extends JFrame implements ActionListener
 					bamount1.setText(client.getChequing().payBill(client, xml,Integer.parseInt(billnum.getText())));
 				else
 					bamount1.setText(client.getSaving().payBill(client, xml,Integer.parseInt(billnum.getText())));
+				client.getClientInfo(xml,"Email", email);
 			}
 		});
 
@@ -508,7 +516,7 @@ public class Bank extends JFrame implements ActionListener
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 		setTitle("Banking System"); 
-		setSize(450, 650);  
+		setSize(500, 650);  
 		setVisible(true);  
 	}
 
@@ -542,7 +550,7 @@ public class Bank extends JFrame implements ActionListener
 		else 
 			list = client.getCredit().getTransactions();
 		
-		data2=new String[list.size()][3];	
+		data2=new String[list.size()][4];	
 				
 		for(Transaction trans : list)
 		{        
@@ -550,18 +558,22 @@ public class Bank extends JFrame implements ActionListener
 			if(trans instanceof Deposit) 
 			{
 				data2[i][j]="Deposit" ;
+					data2[i][3]="-" ;
 			}
 			else if(trans instanceof Withdraw)
 			{
 				data2[i][j]= "Withdraw";
+					data2[i][3]="-" ;
 			}
 			else if(trans instanceof MoneyTransfer)
 			{
 				data2[i][j]= "Money Transfer";
+				data2[i][3]=((MoneyTransfer)list.get(i)).getAccountName();
 			}
 			else
 			{
 				data2[i][j]= "Bill Payment";
+					data2[i][3]="-" ;
 			}
 
 			j++;            	 

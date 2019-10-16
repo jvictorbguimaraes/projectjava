@@ -275,7 +275,7 @@ public class Client
 			xml.createChildElement(credit, "Number", xml.getNextId("accountId"));
 			xml.createChildElement(credit, "Balance", "0");
 			xml.createChildElement(credit, "CredScore", "0");
-			xml.createChildElement(credit, "CredLimit", "500");
+			xml.createChildElement(credit, "CredLimit", "1000");
 			//xml.createChildElement(credit, "CredLimit", String.valueOf(client.credit.getCredLimit()));
 			xml.createNewParentElement(credit,"Transactions");
 			
